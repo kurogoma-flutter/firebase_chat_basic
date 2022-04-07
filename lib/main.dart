@@ -23,13 +23,13 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatScreen(),
+      home: const ChatScreen(),
     );
   }
 }
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -39,9 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
   int pageIndex = 0;
 
   List<Widget> bottomNavigationPages = [
-    MessageWidget(),
-    ChatScreenOnly(),
-    Settings(),
+    const MessageWidget(),
+    const ChatScreenOnly(),
+    const Settings(),
   ];
 
   @override
@@ -54,35 +54,47 @@ class _ChatScreenState extends State<ChatScreen> {
         currentIndex: pageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
+            icon: GestureDetector(
+              onTap: () {
                 setState(() {
                   pageIndex = 0;
                 });
               },
-              icon: const Icon(Icons.chat),
+              child: const CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage('assets/images/friends.png'),
+                backgroundColor: Colors.transparent,
+              ),
             ),
             label: 'ともだち',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
+            icon: GestureDetector(
+              onTap: () {
                 setState(() {
                   pageIndex = 1;
                 });
               },
-              icon: const Icon(Icons.person_pin_outlined),
+              child: const CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage('assets/images/solo_man.png'),
+                backgroundColor: Colors.transparent,
+              ),
             ),
             label: 'あなた',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
+            icon: GestureDetector(
+              onTap: () {
                 setState(() {
                   pageIndex = 2;
                 });
               },
-              icon: const Icon(Icons.settings),
+              child: const CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage('assets/images/setting_image.png'),
+                backgroundColor: Colors.transparent,
+              ),
             ),
             label: 'せってい',
           ),
