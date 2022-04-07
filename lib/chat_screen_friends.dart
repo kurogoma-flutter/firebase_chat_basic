@@ -8,9 +8,9 @@ class ChatScreenFriends extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
-        elevation: 6,
+        elevation: 2,
         title: const Text(
-          'チャット画面',
+          'くろごま',
           style: TextStyle(
             color: Colors.black87,
           ),
@@ -18,6 +18,7 @@ class ChatScreenFriends extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Colors.black87,
         ),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search_outlined))],
       ),
       body: SafeArea(
         child: Column(
@@ -75,7 +76,7 @@ class ChatScreenFriends extends StatelessWidget {
                 ),
               ),
             ),
-            textInputWidget(),
+            TextInputWidget(),
           ],
         ),
       ),
@@ -122,19 +123,32 @@ class RightBaloon extends StatelessWidget {
   }
 }
 
-class textInputWidget extends StatelessWidget {
-  const textInputWidget({
+class TextInputWidget extends StatelessWidget {
+  const TextInputWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
       height: 68,
       child: Row(
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.photo_outlined)),
+          GestureDetector(
+            onTap: () {},
+            child: Image.asset(
+              'assets/images/camera.png',
+              scale: 11,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Image.asset(
+              'assets/images/file.png',
+              scale: 11,
+            ),
+          ),
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -144,15 +158,23 @@ class textInputWidget extends StatelessWidget {
               ),
               child: const TextField(
                 autofocus: true,
-                decoration: InputDecoration(border: InputBorder.none),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  counterText: '',
+                ),
+                maxLines: 1,
+                maxLength: 400,
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const RotationTransition(
-              turns: AlwaysStoppedAnimation(-45 / 360),
-              child: Icon(Icons.send_rounded),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: GestureDetector(
+              onTap: () {},
+              child: Image.asset(
+                'assets/images/ufo2.png',
+                scale: 5,
+              ),
             ),
           ),
         ],
