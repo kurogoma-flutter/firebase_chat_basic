@@ -1,40 +1,93 @@
+import 'package:chat_app_basic/chat_screen_only.dart';
+import 'package:chat_app_basic/message_widget.dart';
+import 'package:chat_app_basic/settings.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Chatアプリ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: ChatScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class ChatScreen extends StatefulWidget {
+  ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ChatScreenState extends State<ChatScreen> {
+  int pageIndex = 0;
+
+  List<Widget> bottomNavigationPages = [
+    MessageWidget(),
+    ChatScreenOnly(),
+    Settings(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(),
+      body: SafeArea(
+        child: bottomNavigationPages[pageIndex],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: pageIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: IconButton(
+              onPressed: () {
+                setState(() {
+                  pageIndex = 0;
+                });
+              },
+              icon: const Icon(Icons.chat),
+            ),
+            label: 'ともだち',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              onPressed: () {
+                setState(() {
+                  pageIndex = 1;
+                });
+              },
+              icon: const Icon(Icons.person_pin_outlined),
+            ),
+            label: 'あなた',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              onPressed: () {
+                setState(() {
+                  pageIndex = 2;
+                });
+              },
+              icon: const Icon(Icons.settings),
+            ),
+            label: 'せってい',
+          ),
+        ],
+      ),
     );
   }
 }
