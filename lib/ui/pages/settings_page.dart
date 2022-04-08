@@ -13,7 +13,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Settings',
+          '設定をする',
           style: TextStyle(color: Colors.black87),
         ),
         iconTheme: const IconThemeData(

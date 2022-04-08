@@ -1,6 +1,6 @@
-import 'package:chat_app_basic/chat_screen_only.dart';
-import 'package:chat_app_basic/message_widget.dart';
-import 'package:chat_app_basic/settings.dart';
+import 'package:chat_app_basic/ui/pages/chat_solo_page.dart';
+import 'package:chat_app_basic/ui/pages/friends_list_page.dart';
+import 'package:chat_app_basic/ui/pages/settings_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

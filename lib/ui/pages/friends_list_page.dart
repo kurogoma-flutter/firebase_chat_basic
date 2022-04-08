@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'chat_screen_friends.dart';
+import 'chat_friends_page.dart';
 
 class MessageWidget extends StatelessWidget {
   const MessageWidget({
@@ -14,7 +14,7 @@ class MessageWidget extends StatelessWidget {
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 2,
         title: const Text(
-          'Message',
+          'ともだち一覧',
           style: TextStyle(color: Colors.black87),
         ),
         actions: <Widget>[
