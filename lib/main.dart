@@ -1,10 +1,14 @@
 import 'package:chat_app_basic/chat_screen_only.dart';
 import 'package:chat_app_basic/message_widget.dart';
 import 'package:chat_app_basic/settings.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  // Firebase初期化
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -41,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Widget> bottomNavigationPages = [
     const MessageWidget(),
     const ChatScreenOnly(),
-    const Settings(),
+    const SettingsPage(),
   ];
 
   @override

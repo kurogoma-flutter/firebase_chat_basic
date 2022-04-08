@@ -1,32 +1,84 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ChatScreenOnly extends StatelessWidget {
+class ChatScreenOnly extends StatefulWidget {
   const ChatScreenOnly({Key? key}) : super(key: key);
+
+  @override
+  State<ChatScreenOnly> createState() => _ChatScreenOnlyState();
+}
+
+class _ChatScreenOnlyState extends State<ChatScreenOnly> {
+  final TextEditingController _textController = TextEditingController();
+  late String _text;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance.collection('yourRoom').orderBy('createdAt', descending: true).snapshots();
+
+  _createAtText(data) {
+    var timestamp = data['create_at'];
+    DateTime createdAt;
+    DateFormat format = DateFormat('yyyy-MM-dd-H:m');
+    if (timestamp is Timestamp) {
+      // toDate()でDateTimeに変換
+      createdAt = timestamp.toDate();
+    } else {
+      createdAt = DateTime.now();
+    }
+
+    return format.format(createdAt).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 32,
-                ),
-                child: Column(
-                  children: [
-                    RightBaloon(),
-                    RightBaloon(),
-                    RightBaloon(),
-                  ],
-                ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _chatStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+                child: Text(
+              'ERROR!! Something went wrong',
+              style: TextStyle(fontSize: 20, color: Colors.red),
+            ));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+                color: Colors.cyan,
               ),
+            );
+          }
+
+          return SafeArea(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 32,
+                    ),
+                    child: ListView(
+                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                        return RightBaloon(text: data['text'] ?? '...');
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                TextInputWidget(),
+              ],
             ),
-            TextInputWidget(),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -35,7 +87,10 @@ class ChatScreenOnly extends StatelessWidget {
 class RightBaloon extends StatelessWidget {
   const RightBaloon({
     Key? key,
+    required this.text,
   }) : super(key: key);
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +113,11 @@ class RightBaloon extends StatelessWidget {
               1.0
             ]),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(16.0),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Flutter学習中！',
-              style: TextStyle(color: Colors.white),
+              text,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
