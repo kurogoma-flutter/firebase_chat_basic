@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// TODO :
+/// ログイン・アウト
+/// 退会処理
+/// ポリシーページ
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 

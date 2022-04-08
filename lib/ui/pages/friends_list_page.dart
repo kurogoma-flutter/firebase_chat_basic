@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'chat_friends_page.dart';
 
+/// TODO: ログインユーザーが所持するともだち一覧を表示
+
 class MessageWidget extends StatelessWidget {
   const MessageWidget({
     Key? key,

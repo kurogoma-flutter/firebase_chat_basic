@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// TODO: ともだちとのチャットを表示（サブコレクション）
+
 class ChatScreenFriends extends StatelessWidget {
   const ChatScreenFriends({Key? key}) : super(key: key);
 
