@@ -11,7 +11,7 @@ Future<void> main() async {
   // Firebase初期化
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -22,11 +22,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) => MaterialApp.router(
-    routeInformationParser: _router.routeInformationParser,
-    routerDelegate: _router.routerDelegate,
-    title: 'レビューアプリ',
-  );
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
+        title: 'レビューアプリ',
+      );
 
   /// ルーティング設定
   final GoRouter _router = GoRouter(
