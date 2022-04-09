@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../services/firestore.dart';
+
 /// TODO: 登録処理・ImagePicker追加（カメラは最後）
 
 class ChatScreenOnly extends StatefulWidget {
@@ -12,15 +14,18 @@ class ChatScreenOnly extends StatefulWidget {
 }
 
 class _ChatScreenOnlyState extends State<ChatScreenOnly> {
+  FirestoreMethods methods = FirestoreMethods();
   final TextEditingController _textController = TextEditingController();
   late String _text;
+  late final Stream<QuerySnapshot> _chatStream;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _chatStream = methods.getYourChatData();
+    });
   }
-
-  final Stream<QuerySnapshot> _chatStream = FirebaseFirestore.instance.collection('yourRoom').orderBy('createdAt', descending: true).snapshots();
 
   _createAtText(data) {
     var timestamp = data['create_at'];
