@@ -19,4 +19,19 @@ class FirestoreMethods {
       'createAt': date.now,
     });
   }
+
+  // ともだち一覧用ユーザーデータ取得
+  Future getUserList() async {
+    // yourRoomからログインユーザーのUIDが含まれるデータを取得
+    final user = await getLoggedInUser();
+    final Stream<QuerySnapshot> reviewStream =
+        FirebaseFirestore.instance.collection('friends').where('myUid', isEqualTo: user.uid).where('pairUid', isEqualTo: user.uid).snapshots();
+    return reviewStream;
+  }
+
+  // ユーザー個人データを取得
+  Future getPersonalData() async {
+    final user = await getLoggedInUser();
+    return await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: user.uid).get();
+  }
 }
