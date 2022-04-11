@@ -1,3 +1,5 @@
+import 'package:chat_app_basic/utils/date_methods.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // ログインユーザーの情報を取得
@@ -55,7 +57,7 @@ Future login(String email, String password) async {
 }
 
 // ユーザー作成（メール）
-Future registWithEmail(String email, String password) async {
+Future registWithEmail(String userName, String comment, String email, String password) async {
   try {
     // メール/パスワードでユーザー登録
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -71,6 +73,15 @@ Future registWithEmail(String email, String password) async {
     );
     // ログインに成功した場合
     final User user = login.user!;
+    // usersコレクションにも追加
+    DateMethods date = DateMethods();
+    await FirebaseFirestore.instance.collection('users').add({
+      'uid': user.uid,
+      'userName': userName,
+      'comment': comment,
+      'iconPath': '',
+      'createAt': date.now,
+    });
     return 'success';
   } on FirebaseAuthException catch (e) {
     // ログインに失敗した場合
