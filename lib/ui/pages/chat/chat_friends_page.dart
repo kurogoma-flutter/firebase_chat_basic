@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 /// TODO: ともだちとのチャットを表示（サブコレクション）
 
-class ChatScreenFriends extends StatelessWidget {
-  const ChatScreenFriends({Key? key}) : super(key: key);
+class ChatScreenFriends extends StatefulWidget {
+  const ChatScreenFriends({Key? key, required String myUid, required String friendsUid}) : super(key: key);
 
+  @override
+  State<ChatScreenFriends> createState() => _ChatScreenFriendsState();
+}
+
+class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

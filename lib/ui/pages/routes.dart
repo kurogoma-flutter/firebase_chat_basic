@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'auth/create_user.dart';
 import 'auth/login_page.dart';
+import 'chat/chat_friends_page.dart';
 import 'chat/chat_page.dart';
 
 /// ルーティング設定
@@ -31,14 +32,15 @@ final GoRouter router = GoRouter(
       path: '/test', // ユーザープロフィール画面
       builder: (BuildContext context, GoRouterState state) => const TestPage(),
     ),
-    // GoRoute(
-    //   path: '/reviewDetail/:id', // レビュー詳細ページ
-    //   builder: (context, state) {
-    //     // パスパラメータの値を取得するには state.params を使用
-    //     final int id = int.parse(state.params['id']!);
-    //     return ReviewDetail(id: id);
-    //   },
-    // ),
+    GoRoute(
+      path: '/chat/:myYid/:friendsUid', // レビュー詳細ページ
+      builder: (context, state) {
+        // パスパラメータの値を取得するには state.params を使用
+        final String myUid = state.params['myUid']!;
+        final String friendsUid = state.params['friendsUid']!;
+        return ChatScreenFriends(myUid: myUid, friendsUid: friendsUid);
+      },
+    ),
   ],
   initialLocation: '/',
 );

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// TODO: ログインユーザーが所持するともだち一覧を表示
 
@@ -14,6 +15,9 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
+  // ログインユーザー取得
+  final user = FirebaseAuth.instance.currentUser;
+  // クエリ処理で用いるリスト
   List<DocumentSnapshot> friendList = [];
   List<DocumentSnapshot> userList = [];
   List<dynamic> uidList = [];
@@ -22,8 +26,6 @@ class _MessageWidgetState extends State<MessageWidget> {
   void initState() {
     super.initState();
     Future(() async {
-      // ログインユーザー取得
-      final user = FirebaseAuth.instance.currentUser;
       // friendsコレクションから、友達のUID一覧を取得
       var snapshot = await FirebaseFirestore.instance.collection('friends').where('hostUid', isEqualTo: user!.uid).get();
       setState(() {
@@ -93,6 +95,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               ),
               onTap: () {
                 // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
+                context.go('/chat/${user!.uid}/${document['uid']}');
               },
             );
           }).toList(),
