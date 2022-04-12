@@ -3,6 +3,7 @@ import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat_solo_page.dart';
 import 'package:chat_app_basic/ui/pages/friends_list_page.dart';
 import 'package:chat_app_basic/ui/pages/settings_page.dart';
+import 'package:chat_app_basic/ui/pages/test_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,6 +48,10 @@ class _MyAppState extends State<MyApp> {
       GoRoute(
         path: '/setting', // ユーザープロフィール画面
         builder: (BuildContext context, GoRouterState state) => const SettingsPage(),
+      ),
+      GoRoute(
+        path: '/test', // ユーザープロフィール画面
+        builder: (BuildContext context, GoRouterState state) => const TestPage(),
       ),
       // GoRoute(
       //   path: '/reviewDetail/:id', // レビュー詳細ページ

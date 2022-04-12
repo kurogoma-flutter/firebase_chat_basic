@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// TODO :
 /// ログイン・アウト
@@ -27,9 +28,13 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 2,
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
-          child: Text('Setting'),
+          child: ElevatedButton(
+              onPressed: () {
+                context.go('/test');
+              },
+              child: const Text('テスト')),
         ),
       ),
     );
