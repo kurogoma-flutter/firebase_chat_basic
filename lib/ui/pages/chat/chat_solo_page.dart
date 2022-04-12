@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../services/firestore.dart';
+import '../../../services/firestore.dart';
 
 /// TODO: 登録処理・ImagePicker追加（カメラは最後）
 

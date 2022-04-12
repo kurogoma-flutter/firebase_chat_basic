@@ -22,11 +22,16 @@ class FirestoreMethods {
 
   // ともだち一覧用ユーザーデータ取得
   Future getUserList() async {
+    List<DocumentSnapshot> friendList = [];
     // yourRoomからログインユーザーのUIDが含まれるデータを取得
     final user = await getLoggedInUser();
-    final Stream<QuerySnapshot> reviewStream =
-        FirebaseFirestore.instance.collection('friends').where('myUid', isEqualTo: user.uid).where('pairUid', isEqualTo: user.uid).snapshots();
-    return reviewStream;
+    var snapshot = await FirebaseFirestore.instance.collection('friends').where('hostUid', isEqualTo: user.uid).limit(1).get();
+    friendList = snapshot.docs;
+    return await getFriendList(friendList);
+  }
+
+  Future getFriendList(friendList) async {
+    return FirebaseFirestore.instance.collection('users').where('uid', arrayContainsAny: friendList.friendsUid).snapshots();
   }
 
   // ユーザー個人データを取得
