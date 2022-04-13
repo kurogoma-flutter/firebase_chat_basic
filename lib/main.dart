@@ -1,6 +1,6 @@
+import 'package:chat_app_basic/services/routes.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
-import 'package:chat_app_basic/ui/pages/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

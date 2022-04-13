@@ -1,4 +1,5 @@
 import 'package:chat_app_basic/ui/pages/settings/settings_page.dart';
+import 'package:chat_app_basic/ui/pages/settings/user_profile.dart';
 import 'package:chat_app_basic/ui/pages/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,12 +27,16 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) => const RegistUserWithMail(),
     ),
     GoRoute(
-      path: '/setting', // ユーザープロフィール画面
+      path: '/setting', // 設定画面
       builder: (BuildContext context, GoRouterState state) => const SettingsPage(),
     ),
     GoRoute(
-      path: '/test', // ユーザープロフィール画面
+      path: '/test', // テストページ
       builder: (BuildContext context, GoRouterState state) => const TestPage(),
+    ),
+    GoRoute(
+      path: '/userPage', // ユーザープロフィール画面
+      builder: (BuildContext context, GoRouterState state) => const UserProfilePage(),
     ),
     GoRoute(
       path: '/chat/:myYid/:friendsUid', // レビュー詳細ページ
