@@ -1,16 +1,17 @@
-import 'package:chat_app_basic/ui/pages/chat/settings_page.dart';
+import 'package:chat_app_basic/ui/pages/settings/settings_page.dart';
 import 'package:chat_app_basic/ui/pages/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'auth/create_user.dart';
-import 'auth/login_page.dart';
-import 'chat/chat_friends_page.dart';
-import 'chat/chat_page.dart';
+import '../ui/pages/auth/create_user.dart';
+import '../ui/pages/auth/login_page.dart';
+import '../ui/pages/chat/chat_friends_page.dart';
+import '../ui/pages/chat/chat_page.dart';
+import '../ui/pages/error_page.dart';
 
 /// ルーティング設定
 final GoRouter router = GoRouter(
-  // errorBuilder: (context, state) => ErrorPage(),
+  errorBuilder: (context, state) => const ErrorPage(),
   routes: <GoRoute>[
     GoRoute(
       path: '/', // ベース：認証状態を識別してホーム画面orログインへ遷移させる
