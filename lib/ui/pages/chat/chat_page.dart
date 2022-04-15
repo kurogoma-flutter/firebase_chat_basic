@@ -12,7 +12,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  int pageIndex = 0;
+  int pageIndex = 1;
 
   List<Widget> bottomNavigationPages = [
     const MessageWidget(),
