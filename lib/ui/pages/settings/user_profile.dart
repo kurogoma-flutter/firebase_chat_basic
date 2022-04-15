@@ -16,7 +16,7 @@ class UserProfilePage extends StatelessWidget {
         ),
         title: const Text('プロフィール画面'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('プロフィール'),
       ),
     );

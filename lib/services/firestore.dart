@@ -30,6 +30,7 @@ class FirestoreMethods {
     return await getFriendList(friendList);
   }
 
+  // friendList(array)に合致するユーザー一覧を追加
   Future getFriendList(friendList) async {
     return FirebaseFirestore.instance.collection('users').where('uid', arrayContainsAny: friendList.friendsUid).snapshots();
   }

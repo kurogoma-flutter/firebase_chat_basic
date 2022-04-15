@@ -39,7 +39,7 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) => const UserProfilePage(),
     ),
     GoRoute(
-      path: '/chat/:myYid/:friendsUid', // レビュー詳細ページ
+      path: '/chat/:myUid/:friendsUid', // レビュー詳細ページ
       builder: (context, state) {
         // パスパラメータの値を取得するには state.params を使用
         final String myUid = state.params['myUid']!;

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 /// TODO :
 /// ログイン・アウト
 /// 退会処理
-/// ポリシーページ
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -169,11 +168,32 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 40),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'サインアウト',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                '退会する',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ),
             ElevatedButton(
-                onPressed: () {
-                  context.go('/test');
-                },
-                child: const Text('テスト')),
+              onPressed: () {
+                context.go('/test');
+              },
+              child: const Text('テスト'),
+            ),
           ],
         ),
       ),
