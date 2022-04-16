@@ -1,21 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'chat_items.dart';
 
 /// TODO: ともだちとのチャットを表示（サブコレクション）
 
 class ChatScreenFriends extends StatefulWidget {
-  const ChatScreenFriends({Key? key, required String myUid, required String friendsUid}) : super(key: key);
+  const ChatScreenFriends({Key? key, required this.myUid, required this.friendsUid}) : super(key: key);
+  final String myUid;
+  final String friendsUid;
 
   @override
   State<ChatScreenFriends> createState() => _ChatScreenFriendsState();
 }
 
 class _ChatScreenFriendsState extends State<ChatScreenFriends> {
+  // サブコレクションを取得(snapshot)
+
+  // 相手ユーザーデータを取得
+  List<DocumentSnapshot> _friendData = [];
+  _getFriendData(friendsUid) async {
+    var snapshotId = await FirebaseFirestore.instance.collection('user').where('uid', isEqualTo: friendsUid).limit(1).get();
+    setState(() {
+      _friendData = snapshotId.docs;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFriendData('sss');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 2,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_sharp),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
         title: const Text(
           'くろごま',
           style: TextStyle(
@@ -25,7 +55,12 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
         iconTheme: const IconThemeData(
           color: Colors.black87,
         ),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search_outlined))],
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search_outlined),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -34,96 +69,27 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
-                  vertical: 32,
                 ),
-                child: Column(
-                  children: [
-                    RightBaloon(),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            child: ClipOval(
-                              child: Image.asset('assets/images/github.png'),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(40),
-                                topLeft: Radius.circular(40),
-                                bottomRight: Radius.circular(40),
-                              ),
-                              gradient: LinearGradient(
-                                begin: FractionalOffset.topLeft,
-                                end: FractionalOffset.bottomRight,
-                                colors: [
-                                  Color(0xFF7B3CFF),
-                                  Color(0xFF136FFF),
-                                ],
-                                stops: [0.0, 1.0],
-                              ),
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text(
-                                '楽しいですね！！',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    RightBaloon(),
-                    RightBaloon(),
+                child: ListView(
+                  children: const [
+                    RightBalloon(content: 'ほぉほぉ'),
+                    LeftBalloon(content: 'ふぅん'),
+                    RightBalloon(content: 'サンプル'),
+                    RightBalloon(content: 'わーい'),
+                    RightBalloon(content: 'わーい'),
+                    RightImage(
+                        imagePath:
+                            'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/test%2F20210201_c1a.jpeg?alt=media&token=eef5bbec-9f67-4012-b480-3179b7ef5a44'),
+                    LeftImage(
+                        imagePath:
+                            'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/test%2F2020109162212.png?alt=media&token=618bc073-7822-46f6-bd84-a9e98d68a92c'),
+                    LeftBalloon(content: 'そうだよね'),
                   ],
                 ),
               ),
             ),
-            TextInputWidget(),
+            const TextInputWidget(),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class RightBaloon extends StatelessWidget {
-  const RightBaloon({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(40),
-              topLeft: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-            ),
-            gradient: LinearGradient(begin: FractionalOffset.topLeft, end: FractionalOffset.bottomRight, colors: [
-              Color(0xFFFF570D),
-              Color(0xFFFF367F),
-            ], stops: [
-              0.0,
-              1.0
-            ]),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Flutter学習中！',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
         ),
       ),
     );
@@ -187,5 +153,24 @@ class TextInputWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// チャットの要素を決定する
+// chatItem => Firestoreで取得したドキュメント
+_chatItem(chatContent) {
+  // 画像か判別する
+  if (chatContent['imagePath'] == '') {
+    if (chatContent['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+      return RightBalloon(content: chatContent['text']);
+    } else {
+      return LeftBalloon(content: chatContent['text']);
+    }
+  } else {
+    if (chatContent['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+      return RightImage(imagePath: chatContent['imagePath']);
+    } else {
+      return LeftImage(imagePath: chatContent['imagePath']);
+    }
   }
 }

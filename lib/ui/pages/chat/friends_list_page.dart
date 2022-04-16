@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// TODO: ログインユーザーが所持するともだち一覧を表示
-
 class MessageWidget extends StatefulWidget {
   const MessageWidget({
     Key? key,
@@ -95,7 +93,9 @@ class _MessageWidgetState extends State<MessageWidget> {
               ),
               onTap: () {
                 // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
-                context.go('/chat/${user!.uid}/${document['uid']}');
+                print(user!.uid);
+                print(document['uid']);
+                context.go('/chat/${user!.uid.toString()}/${document['uid'].toString()}');
               },
             );
           }).toList(),

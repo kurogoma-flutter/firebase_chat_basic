@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../services/firestore.dart';
+import 'chat_items.dart';
 
 /// TODO: 登録処理・ImagePicker追加（カメラは最後）
 
@@ -71,12 +72,11 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 32,
                     ),
                     child: ListView(
                       children: snapshot.data!.docs.map((DocumentSnapshot document) {
                         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                        return RightBaloon(text: data['text'] ?? '...');
+                        return RightBalloon(content: data['text']);
                       }).toList(),
                     ),
                   ),
@@ -86,48 +86,6 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class RightBaloon extends StatelessWidget {
-  const RightBaloon({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(40),
-              topLeft: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-            ),
-            gradient: LinearGradient(begin: FractionalOffset.topLeft, end: FractionalOffset.bottomRight, colors: [
-              Color(0xFFFF570D),
-              Color(0xFFFF367F),
-            ], stops: [
-              0.0,
-              1.0
-            ]),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
       ),
     );
   }
