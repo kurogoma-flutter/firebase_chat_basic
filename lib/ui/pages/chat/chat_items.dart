@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class LeftBalloon extends StatelessWidget {
-  const LeftBalloon({
-    Key? key,
-    required this.content,
-  }) : super(key: key);
+  const LeftBalloon({Key? key, required this.content, required this.iconPath}) : super(key: key);
+
   final String content;
+  final String iconPath;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,7 +14,7 @@ class LeftBalloon extends StatelessWidget {
         children: [
           CircleAvatar(
             child: ClipOval(
-              child: Image.asset('assets/images/github.png'),
+              child: Image.network(iconPath),
             ),
           ),
           const SizedBox(width: 16),
@@ -90,9 +90,10 @@ class RightBalloon extends StatelessWidget {
 }
 
 class LeftImage extends StatelessWidget {
-  const LeftImage({Key? key, required this.imagePath}) : super(key: key);
+  const LeftImage({Key? key, required this.imagePath, required this.iconPath}) : super(key: key);
 
   final String imagePath;
+  final String iconPath;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -104,7 +105,7 @@ class LeftImage extends StatelessWidget {
           children: [
             CircleAvatar(
               child: ClipOval(
-                child: Image.asset('assets/images/github.png'),
+                child: Image.network(iconPath),
               ),
             ),
             const SizedBox(width: 16),

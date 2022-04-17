@@ -41,7 +41,6 @@ class _MessageWidgetState extends State<MessageWidget> {
 
   test() {
     print(uidList[0]);
-    print(friendList);
     print(friendList[0]);
     print(userList);
   }
@@ -93,8 +92,6 @@ class _MessageWidgetState extends State<MessageWidget> {
               ),
               onTap: () {
                 // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
-                print(user!.uid);
-                print(document['uid']);
                 context.go('/chat/${user!.uid.toString()}/${document['uid'].toString()}');
               },
             );

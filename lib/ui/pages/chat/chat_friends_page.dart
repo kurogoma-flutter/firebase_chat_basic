@@ -17,21 +17,41 @@ class ChatScreenFriends extends StatefulWidget {
 }
 
 class _ChatScreenFriendsState extends State<ChatScreenFriends> {
-  // サブコレクションを取得(snapshot)
-
   // 相手ユーザーデータを取得
-  List<DocumentSnapshot> _friendData = [];
-  _getFriendData(friendsUid) async {
-    var snapshotId = await FirebaseFirestore.instance.collection('user').where('uid', isEqualTo: friendsUid).limit(1).get();
+  List<DocumentSnapshot> friendData = [];
+  _getFriendData() async {
+    var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: widget.friendsUid).limit(1).get();
     setState(() {
-      _friendData = snapshotId.docs;
+      friendData = document.docs;
+    });
+  }
+
+  // チャットデータ取得
+  List<DocumentSnapshot> _chatData = [];
+  _getChatData() async {
+    var document = await FirebaseFirestore.instance
+        .collection('chatRoom')
+        .doc('iDUQweyzoVQJt8IloDMb')
+        .collection('chatContents')
+        .orderBy('timestamp', descending: false)
+        .get();
+    setState(() {
+      _chatData = document.docs;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _getFriendData('sss');
+    Future(() async {
+      await _getFriendData();
+      await _getChatData();
+    });
+  }
+
+  test() {
+    print(_chatData);
+    print(friendData);
   }
 
   @override
@@ -46,8 +66,8 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
             context.go('/');
           },
         ),
-        title: const Text(
-          'くろごま',
+        title: Text(
+          friendData[0]['userName'],
           style: TextStyle(
             color: Colors.black87,
           ),
@@ -69,26 +89,16 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
+                  vertical: 10,
                 ),
-                child: ListView(
-                  children: const [
-                    RightBalloon(content: 'ほぉほぉ'),
-                    LeftBalloon(content: 'ふぅん'),
-                    RightBalloon(content: 'サンプル'),
-                    RightBalloon(content: 'わーい'),
-                    RightBalloon(content: 'わーい'),
-                    RightImage(
-                        imagePath:
-                            'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/test%2F20210201_c1a.jpeg?alt=media&token=eef5bbec-9f67-4012-b480-3179b7ef5a44'),
-                    LeftImage(
-                        imagePath:
-                            'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/test%2F2020109162212.png?alt=media&token=618bc073-7822-46f6-bd84-a9e98d68a92c'),
-                    LeftBalloon(content: 'そうだよね'),
-                  ],
+                child: Column(
+                  children: _chatData.map((document) {
+                    return _chatItem(document, friendData[0]['iconPath']);
+                  }).toList(),
                 ),
               ),
             ),
-            const TextInputWidget(),
+            TextInputWidget(),
           ],
         ),
       ),
@@ -96,81 +106,73 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   }
 }
 
-class TextInputWidget extends StatelessWidget {
-  const TextInputWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      height: 68,
-      child: Row(
-        children: [
-          GestureDetector(
+Widget TextInputWidget() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    height: 68,
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: () {},
+          child: Image.asset(
+            'assets/images/camera.png',
+            scale: 11,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Image.asset(
+            'assets/images/file.png',
+            scale: 11,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: const TextField(
+              autofocus: true,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                counterText: '',
+              ),
+              maxLines: 1,
+              maxLength: 400,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: GestureDetector(
             onTap: () {},
             child: Image.asset(
-              'assets/images/camera.png',
-              scale: 11,
+              'assets/images/ufo2.png',
+              scale: 5,
             ),
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Image.asset(
-              'assets/images/file.png',
-              scale: 11,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: const TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  counterText: '',
-                ),
-                maxLines: 1,
-                maxLength: 400,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/images/ufo2.png',
-                scale: 5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }
 
-// チャットの要素を決定する
-// chatItem => Firestoreで取得したドキュメント
-_chatItem(chatContent) {
+// テキストか画像を識別して返す
+Widget _chatItem(DocumentSnapshot chatContent, String friendsIconPath) {
   // 画像か判別する
   if (chatContent['imagePath'] == '') {
     if (chatContent['uid'] == FirebaseAuth.instance.currentUser!.uid) {
       return RightBalloon(content: chatContent['text']);
     } else {
-      return LeftBalloon(content: chatContent['text']);
+      return LeftBalloon(content: chatContent['text'], iconPath: friendsIconPath);
     }
   } else {
     if (chatContent['uid'] == FirebaseAuth.instance.currentUser!.uid) {
       return RightImage(imagePath: chatContent['imagePath']);
     } else {
-      return LeftImage(imagePath: chatContent['imagePath']);
+      return LeftImage(imagePath: chatContent['imagePath'], iconPath: friendsIconPath);
     }
   }
 }
