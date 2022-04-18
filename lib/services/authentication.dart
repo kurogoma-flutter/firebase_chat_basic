@@ -149,8 +149,13 @@ Future sendPasswordResetEmail(String email, BuildContext context) async {
 Future deleteUser(BuildContext context) async {
   // 退会処理
   var result = confirmDialog('確認ダイアログ', '削除してもよろしいですか？', context);
+  User? user = FirebaseAuth.instance.currentUser;
   if (result == 1) {
-    await FirebaseAuth.instance.currentUser?.delete();
+    await user!.delete();
+    // usersコレクションからも削除する
+    var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: user.uid).get();
+    await FirebaseFirestore.instance.collection('users').doc(document.docs.toString()).delete();
+    // 全て削除したらログインページへ遷移する
     context.go('/login');
   }
 }
