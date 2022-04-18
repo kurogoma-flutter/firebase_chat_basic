@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// チャット吹き出し（相手側）
 class LeftBalloon extends StatelessWidget {
   const LeftBalloon({Key? key, required this.content, required this.iconPath}) : super(key: key);
 
@@ -49,6 +50,7 @@ class LeftBalloon extends StatelessWidget {
   }
 }
 
+/// チャット吹き出し（自分側）
 class RightBalloon extends StatelessWidget {
   const RightBalloon({
     Key? key,
@@ -89,6 +91,7 @@ class RightBalloon extends StatelessWidget {
   }
 }
 
+/// 相手側画像
 class LeftImage extends StatelessWidget {
   const LeftImage({Key? key, required this.imagePath, required this.iconPath}) : super(key: key);
 
@@ -127,6 +130,7 @@ class LeftImage extends StatelessWidget {
   }
 }
 
+/// 自分側画像
 class RightImage extends StatelessWidget {
   const RightImage({Key? key, required this.imagePath}) : super(key: key);
 

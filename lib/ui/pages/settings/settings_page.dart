@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../services/authentication.dart';
+
 /// TODO :
 /// ログイン・アウト
 /// 退会処理
@@ -170,7 +172,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             const SizedBox(height: 40),
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                await signOut(context);
+              },
               child: const Text(
                 'サインアウト',
                 style: TextStyle(

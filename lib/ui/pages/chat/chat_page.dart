@@ -1,3 +1,4 @@
+import 'package:chat_app_basic/ui/components/constants.dart';
 import 'package:chat_app_basic/ui/pages/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +13,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  int pageIndex = 1;
-
+  // デフォルトは自分のチャットページから
+  int pageIndex = defaultPageIndex;
+  // BottomNavigationPage一覧
   List<Widget> bottomNavigationPages = [
     const MessageWidget(),
     const ChatScreenOnly(),

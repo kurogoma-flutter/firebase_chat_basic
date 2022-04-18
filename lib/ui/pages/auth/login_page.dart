@@ -16,8 +16,6 @@ class MailLoginPage extends StatefulWidget {
 }
 
 class _MailLoginPageState extends State<MailLoginPage> {
-  // エラーメッセージなどの格納先
-  String infoText = "";
   // 入力されたメールアドレス（ログイン）
   String loginUserEmail = "";
   // 入力されたパスワード（ログイン）
@@ -116,10 +114,6 @@ class _MailLoginPageState extends State<MailLoginPage> {
                     );
                     // ログインに成功した場合
                     final User user = result.user!;
-                    setState(() {
-                      infoText = "ログイン!";
-                    });
-
                     return context.go('/');
                   } on FirebaseAuthException catch (e) {
                     // ログインに失敗した場合

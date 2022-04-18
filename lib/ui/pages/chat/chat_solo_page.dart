@@ -81,7 +81,7 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
                     ),
                   ),
                 ),
-                TextInputWidget(),
+                const TextInputWidget(),
               ],
             ),
           );
@@ -91,6 +91,7 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
   }
 }
 
+/// テキスト入力フォーム
 class TextInputWidget extends StatelessWidget {
   const TextInputWidget({
     Key? key,

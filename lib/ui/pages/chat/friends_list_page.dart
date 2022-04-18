@@ -29,20 +29,16 @@ class _MessageWidgetState extends State<MessageWidget> {
       setState(() {
         friendList = snapshot.docs;
       });
+      // 検索用配列作成
       for (var element in friendList) {
         uidList.add(element['friendsUid']);
       }
+      // 配列に合致するデータ一覧を取得
       var userSnapshot = await FirebaseFirestore.instance.collection('users').where('uid', whereIn: uidList[0]).get();
       setState(() {
         userList = userSnapshot.docs;
       });
     });
-  }
-
-  test() {
-    print(uidList[0]);
-    print(friendList[0]);
-    print(userList);
   }
 
   @override
@@ -60,9 +56,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           IconButton(
             icon: const Icon(Icons.search),
             color: Colors.black87,
-            onPressed: () {
-              test();
-            },
+            onPressed: () {},
           )
         ],
       ),

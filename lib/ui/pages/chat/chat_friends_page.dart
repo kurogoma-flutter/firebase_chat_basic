@@ -49,11 +49,6 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
     });
   }
 
-  test() {
-    print(_chatData);
-    print(friendData);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +63,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
         ),
         title: Text(
           friendData[0]['userName'],
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black87,
           ),
         ),

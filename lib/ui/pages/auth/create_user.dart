@@ -16,12 +16,12 @@ class RegistUserWithMail extends StatefulWidget {
 }
 
 class _RegistUserWithMailState extends State<RegistUserWithMail> {
-  // 入力されたメールアドレス
-  String newUserEmail = "";
+  // 入力されたメールアドレスx
+  String newUserEmail = '';
   // 入力されたパスワード
-  String newUserPassword = "";
+  String newUserPassword = '';
   // エラーメッセージなどの格納先
-  String infoText = "";
+  String infoText = '';
 
   @override
   Widget build(BuildContext context) {

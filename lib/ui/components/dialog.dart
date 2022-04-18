@@ -18,9 +18,7 @@ confirmDialog(String title, String text, BuildContext context) async {
           ),
           ElevatedButton(
             child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop(1);
-            },
+            onPressed: () => Navigator.of(context).pop(1),
           ),
         ],
       );
