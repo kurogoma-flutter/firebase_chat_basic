@@ -1,22 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 // エラーダイアログ
 confirmDialog(String title, String text, BuildContext context) async {
-  return await showDialog<int>(
+  return await showCupertinoDialog<int>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return AlertDialog(
+      return CupertinoAlertDialog(
         title: Text(title),
         content: Text(text),
         actions: <Widget>[
-          ElevatedButton(
+          CupertinoDialogAction(
             child: const Text('キャンセル'),
-            onPressed: () {
-              Navigator.of(context).pop(0);
-            },
+            onPressed: () => Navigator.of(context).pop(0),
           ),
-          ElevatedButton(
+          CupertinoDialogAction(
             child: const Text('OK'),
             onPressed: () => Navigator.of(context).pop(1),
           ),
@@ -28,15 +26,15 @@ confirmDialog(String title, String text, BuildContext context) async {
 
 // アラートダイアログ
 alertDialog(String title, String text, BuildContext context) async {
-  var result = await showDialog<int>(
+  var result = await showCupertinoDialog<int>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return AlertDialog(
+      return CupertinoAlertDialog(
         title: Text(title),
         content: Text(text),
         actions: <Widget>[
-          ElevatedButton(
+          CupertinoDialogAction(
             child: const Text('OK'),
             onPressed: () => Navigator.of(context).pop(1),
           ),
