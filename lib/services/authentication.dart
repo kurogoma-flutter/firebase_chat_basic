@@ -1,6 +1,10 @@
 import 'package:chat_app_basic/utils/date_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+
+import '../ui/components/dialog.dart';
 
 // ログインユーザーの情報を取得
 Future getLoggedInUser() async {
@@ -116,5 +120,37 @@ Future registWithEmail(String userName, String comment, String email, String pas
         message = '予期せぬエラーが発生しました。';
     }
     return message;
+  }
+}
+
+// サインアウト処理
+Future signOut(BuildContext context) async {
+  var result = await confirmDialog('認証チェック', 'ログアウトしますか？', context);
+  if (result == 1) {
+    // ログアウト => ログインへ遷移
+    await FirebaseAuth.instance.signOut();
+    context.go('/login');
+  }
+}
+
+// パスワード再設定メール
+Future sendPasswordResetEmail(String email, BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    // 成功したダイアログ
+    alertDialog('確認ダイアログ', '登録したメールアドレスに再設定用のメールを送信しました。', context);
+  } catch (error) {
+    // 失敗したダイアログ
+    alertDialog('エラーダイアログ', '送信に失敗しました。', context);
+  }
+}
+
+// 退会処理
+Future deleteUser(BuildContext context) async {
+  // 退会処理
+  var result = confirmDialog('確認ダイアログ', '削除してもよろしいですか？', context);
+  if (result == 1) {
+    await FirebaseAuth.instance.currentUser?.delete();
+    context.go('/login');
   }
 }
