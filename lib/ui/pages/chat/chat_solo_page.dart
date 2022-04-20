@@ -108,16 +108,18 @@ class TextInputWidget extends StatelessWidget {
             onTap: () {},
             child: Image.asset(
               'assets/images/camera.png',
-              scale: 11,
+              scale: 1.6,
             ),
           ),
+          const SizedBox(width: 6),
           GestureDetector(
             onTap: () {},
             child: Image.asset(
               'assets/images/file.png',
-              scale: 11,
+              scale: 2,
             ),
           ),
+          const SizedBox(width: 6),
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -142,7 +144,7 @@ class TextInputWidget extends StatelessWidget {
               onTap: () {},
               child: Image.asset(
                 'assets/images/ufo2.png',
-                scale: 5,
+                scale: 6,
               ),
             ),
           ),

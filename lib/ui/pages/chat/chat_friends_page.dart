@@ -101,57 +101,67 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   }
 }
 
-Widget TextInputWidget() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    height: 68,
-    child: Row(
-      children: [
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            'assets/images/camera.png',
-            scale: 11,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            'assets/images/file.png',
-            scale: 11,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: const TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                counterText: '',
-              ),
-              maxLines: 1,
-              maxLength: 400,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: GestureDetector(
+/// テキスト入力フォーム
+class TextInputWidget extends StatelessWidget {
+  const TextInputWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      height: 68,
+      child: Row(
+        children: [
+          GestureDetector(
             onTap: () {},
             child: Image.asset(
-              'assets/images/ufo2.png',
-              scale: 5,
+              'assets/images/camera.png',
+              scale: 1.6,
             ),
           ),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: () {},
+            child: Image.asset(
+              'assets/images/file.png',
+              scale: 2,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: const TextField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  counterText: '',
+                ),
+                maxLines: 1,
+                maxLength: 400,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: GestureDetector(
+              onTap: () {},
+              child: Image.asset(
+                'assets/images/ufo2.png',
+                scale: 6,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // テキストか画像を識別して返す
