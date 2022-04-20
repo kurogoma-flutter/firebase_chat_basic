@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../services/firestore.dart';
+import '../../../services/logger.dart';
 import 'chat_items.dart';
 
 /// TODO: 登録処理・ImagePicker追加（カメラは最後）
@@ -29,17 +30,21 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
   }
 
   _createAtText(data) {
-    var timestamp = data['create_at'];
-    DateTime createdAt;
-    DateFormat format = DateFormat('yyyy-MM-dd-H:m');
-    if (timestamp is Timestamp) {
-      // toDate()でDateTimeに変換
-      createdAt = timestamp.toDate();
-    } else {
-      createdAt = DateTime.now();
+    logger.i('日付処理開始');
+    try {
+      var timestamp = data['create_at'];
+      DateTime createdAt;
+      DateFormat format = DateFormat('yyyy-MM-dd-H:m');
+      if (timestamp is Timestamp) {
+        // toDate()でDateTimeに変換
+        createdAt = timestamp.toDate();
+      } else {
+        createdAt = DateTime.now();
+      }
+      return format.format(createdAt).toString();
+    } on Exception catch (e) {
+      logger.w('日付データの処理に失敗しました。');
     }
-
-    return format.format(createdAt).toString();
   }
 
   @override
