@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../services/logger.dart';
 import 'chat_items.dart';
 
 /// TODO: ともだちとのチャットを表示（サブコレクション）
@@ -17,35 +18,39 @@ class ChatScreenFriends extends StatefulWidget {
 }
 
 class _ChatScreenFriendsState extends State<ChatScreenFriends> {
+  // アイコンパス
+  String userIconPath = '';
+  // 相手のユーザー名
+  String userName = '';
   // 相手ユーザーデータを取得
   List<DocumentSnapshot> friendData = [];
   _getFriendData() async {
-    var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: widget.friendsUid).limit(1).get();
-    setState(() {
-      friendData = document.docs;
-    });
+    logger.i('相手データ取得開始');
+    try {
+      var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: widget.friendsUid).limit(1).get();
+      setState(() {
+        friendData = document.docs;
+        userIconPath = friendData[0]['iconPath'];
+        userName = friendData[0]['userName'];
+      });
+    } on FirebaseAuthException catch (e) {
+      logger.e('ユーザーデータの取得に失敗しました。');
+    }
   }
 
-  // チャットデータ取得
-  List<DocumentSnapshot> _chatData = [];
-  _getChatData() async {
-    var document = await FirebaseFirestore.instance
-        .collection('chatRoom')
-        .doc('iDUQweyzoVQJt8IloDMb')
-        .collection('chatContents')
-        .orderBy('timestamp', descending: false)
-        .get();
-    setState(() {
-      _chatData = document.docs;
-    });
-  }
+  // ユーザーデータ取得
+  final Stream<QuerySnapshot> _chatItemStream = FirebaseFirestore.instance
+      .collection('chatRoom')
+      .doc('iDUQweyzoVQJt8IloDMb')
+      .collection('chatContents')
+      .orderBy('timestamp', descending: false)
+      .snapshots();
 
   @override
   void initState() {
     super.initState();
     Future(() async {
       await _getFriendData();
-      await _getChatData();
     });
   }
 
@@ -62,7 +67,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
           },
         ),
         title: Text(
-          friendData[0]['userName'],
+          userName,
           style: const TextStyle(
             color: Colors.black87,
           ),
@@ -77,26 +82,48 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
+      body: StreamBuilder<QuerySnapshot>(
+          stream: _chatItemStream,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                  child: Text(
+                'ERROR!! Something went wrong',
+                style: TextStyle(fontSize: 30),
+              ));
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Text(
+                  "Loading...",
+                  style: TextStyle(fontSize: 30),
                 ),
-                child: Column(
-                  children: _chatData.map((document) {
-                    return _chatItem(document, friendData[0]['iconPath']);
-                  }).toList(),
-                ),
+              );
+            }
+
+            return SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      child: Column(
+                        children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                          return _chatItem(data, userIconPath);
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  TextInputWidget(),
+                ],
               ),
-            ),
-            TextInputWidget(),
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 }
@@ -165,7 +192,7 @@ class TextInputWidget extends StatelessWidget {
 }
 
 // テキストか画像を識別して返す
-Widget _chatItem(DocumentSnapshot chatContent, String friendsIconPath) {
+Widget _chatItem(chatContent, String friendsIconPath) {
   // 画像か判別する
   if (chatContent['imagePath'] == '') {
     if (chatContent['uid'] == FirebaseAuth.instance.currentUser!.uid) {
