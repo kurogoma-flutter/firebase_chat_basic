@@ -5,14 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ui/components/dialog.dart';
+import 'logger.dart';
 
 // ログインユーザーの情報を取得
-Future getLoggedInUser() async {
-  return FirebaseAuth.instance.currentUser;
+getLoggedInUser() {
+  logger.i('ログインユーザーデータの取得を開始');
+  try {
+    return FirebaseAuth.instance.currentUser;
+  } on FirebaseAuthException catch (e) {
+    logger.w('ログイン中のユーザーデータを取得できませんでした。');
+  }
 }
 
 // ログイン処理（メール）
 Future login(String email, String password) async {
+  logger.i('メールログイン開始');
   try {
     // メール/パスワードでログイン
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -24,6 +31,7 @@ Future login(String email, String password) async {
     final User user = result.user!;
     return 'success';
   } on FirebaseAuthException catch (e) {
+    logger.w('ログインに失敗しました。');
     // ログインに失敗した場合
     String message = '';
     // エラーコード別処理
@@ -62,6 +70,7 @@ Future login(String email, String password) async {
 
 // ユーザー作成（メール）
 Future registWithEmail(String userName, String comment, String email, String password) async {
+  logger.i('新規ユーザーデータ作成');
   try {
     // メール/パスワードでユーザー登録
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -88,6 +97,7 @@ Future registWithEmail(String userName, String comment, String email, String pas
     });
     return 'success';
   } on FirebaseAuthException catch (e) {
+    logger.w('新規ユーザー登録に失敗しました。');
     // ログインに失敗した場合
     String message = '';
     // エラーコード別処理
@@ -125,37 +135,48 @@ Future registWithEmail(String userName, String comment, String email, String pas
 
 // サインアウト処理
 Future signOut(BuildContext context) async {
-  var result = await confirmDialog('認証チェック', 'ログアウトしますか？', context);
-  if (result == 1) {
-    // ログアウト => ログインへ遷移
-    await FirebaseAuth.instance.signOut();
-    context.go('/login');
+  logger.i('サインアウト開始');
+  try {
+    var result = await confirmDialog('認証チェック', 'ログアウトしますか？', context);
+    if (result == 1) {
+      // ログアウト => ログインへ遷移
+      await FirebaseAuth.instance.signOut();
+      context.go('/login');
+    }
+  } on FirebaseAuthException catch (e) {
+    logger.w('サインアウトに失敗しました。');
   }
 }
 
 // パスワード再設定メール
 Future sendPasswordResetEmail(String email, BuildContext context) async {
+  logger.i('パスワード再設定通知開始');
   try {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     // 成功したダイアログ
-    alertDialog('確認ダイアログ', '登録したメールアドレスに再設定用のメールを送信しました。', context);
-  } catch (error) {
+    return alertDialog('確認ダイアログ', '登録したメールアドレスに再設定用のメールを送信しました。', context);
+  } on FirebaseAuthException catch (e) {
+    logger.w('再設定通知の送信に失敗しました。');
     // 失敗したダイアログ
-    alertDialog('エラーダイアログ', '送信に失敗しました。', context);
+    return alertDialog('エラーダイアログ', '送信に失敗しました。', context);
   }
 }
 
 // 退会処理
 Future deleteUser(BuildContext context) async {
-  // 退会処理
-  var result = confirmDialog('確認ダイアログ', '削除してもよろしいですか？', context);
-  User? user = FirebaseAuth.instance.currentUser;
-  if (result == 1) {
-    await user!.delete();
-    // usersコレクションからも削除する
-    var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: user.uid).get();
-    await FirebaseFirestore.instance.collection('users').doc(document.docs.toString()).delete();
-    // 全て削除したらログインページへ遷移する
-    context.go('/login');
+  try {
+    // 退会処理
+    var result = confirmDialog('確認ダイアログ', '削除してもよろしいですか？', context);
+    User? user = FirebaseAuth.instance.currentUser;
+    if (result == 1) {
+      await user!.delete();
+      // usersコレクションからも削除する
+      var document = await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: user.uid).get();
+      await FirebaseFirestore.instance.collection('users').doc(document.docs.toString()).delete();
+      // 全て削除したらログインページへ遷移する
+      context.go('/login');
+    }
+  } on FirebaseAuthException catch (e) {
+    logger.w('退会処理に失敗しました。');
   }
 }
