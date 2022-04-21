@@ -20,12 +20,15 @@ class _MailLoginPageState extends State<MailLoginPage> {
   String loginUserEmail = "";
   // 入力されたパスワード（ログイン）
   String loginUserPassword = "";
+  // パスワードの表示非表示
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ログイン'),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Center(
         child: Column(
@@ -64,7 +67,6 @@ class _MailLoginPageState extends State<MailLoginPage> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
             const Text(
               'パスワード',
               style: TextStyle(
@@ -77,13 +79,21 @@ class _MailLoginPageState extends State<MailLoginPage> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _isObscure,
+                decoration: InputDecoration(
                   focusColor: Colors.red,
                   labelText: 'パスワード',
                   hintText: 'Enter Your Password',
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
-                  border: OutlineInputBorder(borderSide: BorderSide()),
+                  focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
+                  border: const OutlineInputBorder(borderSide: BorderSide()),
+                  suffixIcon: IconButton(
+                    icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  ),
                 ),
                 maxLines: 1,
                 onChanged: (value) {
@@ -99,8 +109,9 @@ class _MailLoginPageState extends State<MailLoginPage> {
                 },
               ),
             ),
-            const SizedBox(height: 30),
-            SizedBox(
+            const SizedBox(height: 20),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
               height: 50,
               width: 200,
               child: ElevatedButton(
@@ -167,9 +178,12 @@ class _MailLoginPageState extends State<MailLoginPage> {
             const SizedBox(height: 10),
             TextButton(
               onPressed: () {
-                context.go('/register');
+                context.go('/createUser');
               },
-              child: const Text('新規登録はこちら'),
+              child: const Text(
+                '新規登録はこちら',
+                style: TextStyle(color: Colors.blueAccent),
+              ),
             ),
             const SizedBox(height: 60),
           ],
