@@ -22,17 +22,56 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
   String newUserPassword = '';
   // エラーメッセージなどの格納先
   String infoText = '';
+  // パスワードの表示非表示
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ログイン'),
+        title: const Text(
+          '新規ユーザー登録',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text(
+              'アカウント名',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
+                cursorColor: Colors.blueAccent,
+                decoration: const InputDecoration(
+                  focusColor: Colors.red,
+                  labelText: 'ユーザー名',
+                  hintText: 'ユーザー名',
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
+                  border: OutlineInputBorder(borderSide: BorderSide()),
+                ),
+                maxLines: 1,
+                onChanged: (value) {
+                  setState(() {
+                    newUserEmail = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "入力してください";
+                  }
+                  return null;
+                },
+              ),
+            ),
             const Text(
               'メールアドレス',
               style: TextStyle(
@@ -66,7 +105,6 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
             const Text(
               'パスワード',
               style: TextStyle(
@@ -79,13 +117,21 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _isObscure,
+                decoration: InputDecoration(
                   focusColor: Colors.red,
                   labelText: 'パスワード',
                   hintText: 'Enter Your Password',
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
-                  border: OutlineInputBorder(borderSide: BorderSide()),
+                  focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
+                  border: const OutlineInputBorder(borderSide: BorderSide()),
+                  suffixIcon: IconButton(
+                    icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  ),
                 ),
                 maxLines: 1,
                 onChanged: (value) {
@@ -101,8 +147,9 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 },
               ),
             ),
-            const SizedBox(height: 30),
-            SizedBox(
+            const SizedBox(height: 20),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
               height: 50,
               width: 200,
               child: ElevatedButton(
@@ -179,12 +226,15 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 context.go('/login');
               },
-              child: const Text('ログインはこちら'),
+              child: const Text(
+                'ログインはこちら',
+                style: TextStyle(color: Colors.blueAccent),
+              ),
             ),
             const SizedBox(height: 60),
           ],
