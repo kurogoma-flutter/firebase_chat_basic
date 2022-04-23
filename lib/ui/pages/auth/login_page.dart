@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../services/authentication.dart';
+import '../../../services/logger.dart';
 import '../../components/dialog.dart';
 
 /// ページ仕様
@@ -192,7 +194,25 @@ class _MailLoginPageState extends State<MailLoginPage> {
                       ),
                       child: Image.asset('assets/images/google-icon.png'),
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      try {
+                        final userCredential = await signInWithGoogle();
+                        if (userCredential.user != null) {
+                          context.go('/');
+                        } else {
+                          context.go('error');
+                        }
+                        logger.i('ログインに成功しました。');
+                      } on FirebaseAuthException catch (e) {
+                        print('FirebaseAuthException');
+                        print('${e.code}');
+                        logger.w('ログインに失敗しました。');
+                      } on Exception catch (e) {
+                        print('Other Exception');
+                        print('${e.toString()}');
+                        logger.w('ログインに失敗しました。');
+                      }
+                    },
                   ),
 
                   /// LINE認証

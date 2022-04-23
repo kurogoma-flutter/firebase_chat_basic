@@ -24,6 +24,7 @@ dependencies:
   go_router: ^3.0.6
   intl: ^0.17.0
   logger: ^1.1.0
+  google_sign_in: ^5.3.0
 
 dev_dependencies:
   flutter_test:
