@@ -143,14 +143,11 @@ class TextInputWidget extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/images/ufo2.png',
-                scale: 6,
-              ),
+          GestureDetector(
+            onTap: () {},
+            child: Image.asset(
+              'assets/images/send.png',
+              scale: 2.4,
             ),
           ),
         ],
