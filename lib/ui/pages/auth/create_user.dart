@@ -259,7 +259,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                     onTap: () {},
                   ),
 
-                  /// Github認証
+                  /// Twitter認証
                   GestureDetector(
                     child: Container(
                       height: 60,
@@ -270,7 +270,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                         border: Border.all(color: Colors.black12),
                       ),
                       child: Image.asset(
-                        'assets/images/github.png',
+                        'assets/images/twitter.png',
                         fit: BoxFit.fill,
                       ),
                     ),

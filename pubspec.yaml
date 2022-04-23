@@ -49,6 +49,8 @@ flutter:
     - assets/images/line-icon-pop.png
     - assets/images/line-round-default.png
     - assets/images/line-square-default.png
+    - assets/images/twitter.png
+    - assets/images/twitter-illust.png
     - assets/icons/appstore.png
     - assets/icons/playstore.png
 

@@ -213,7 +213,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
                     onTap: () {},
                   ),
 
-                  /// Github認証
+                  /// Twitter認証
                   GestureDetector(
                     child: Container(
                       height: 60,
@@ -224,7 +224,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
                         border: Border.all(color: Colors.black12),
                       ),
                       child: Image.asset(
-                        'assets/images/github.png',
+                        'assets/images/twitter.png',
                         fit: BoxFit.fill,
                       ),
                     ),
