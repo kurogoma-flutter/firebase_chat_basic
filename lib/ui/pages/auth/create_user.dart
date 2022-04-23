@@ -40,14 +40,14 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'アカウント名',
+              'ユーザー情報',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              margin: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
@@ -72,15 +72,9 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 },
               ),
             ),
-            const Text(
-              'メールアドレス',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
             Container(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              margin: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
@@ -105,15 +99,9 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 },
               ),
             ),
-            const Text(
-              'パスワード',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
             Container(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              margin: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
@@ -227,6 +215,71 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
               ),
             ),
             const SizedBox(height: 20),
+            const SizedBox(height: 20),
+            const Text(
+              'SNSで登録',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  /// Google認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset('assets/images/google-icon.png'),
+                    ),
+                    onTap: () {},
+                  ),
+
+                  /// LINE認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset(
+                        'assets/images/line-round-default.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+
+                  /// Github認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset(
+                        'assets/images/github.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 context.go('/login');
@@ -236,7 +289,6 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 style: TextStyle(color: Colors.blueAccent),
               ),
             ),
-            const SizedBox(height: 60),
           ],
         ),
       ),

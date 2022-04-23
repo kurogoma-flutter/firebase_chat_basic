@@ -35,7 +35,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'メールアドレス',
+              'メールアドレスでログイン',
               style: TextStyle(
                 fontSize: 20,
               ),
@@ -65,12 +65,6 @@ class _MailLoginPageState extends State<MailLoginPage> {
                   }
                   return null;
                 },
-              ),
-            ),
-            const Text(
-              'パスワード',
-              style: TextStyle(
-                fontSize: 20,
               ),
             ),
             Container(
@@ -109,7 +103,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 20),
               height: 50,
@@ -175,7 +169,71 @@ class _MailLoginPageState extends State<MailLoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+            const Text(
+              'SNS認証',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  /// Google認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset('assets/images/google-icon.png'),
+                    ),
+                    onTap: () {},
+                  ),
+
+                  /// LINE認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset(
+                        'assets/images/line-round-default.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+
+                  /// Github認証
+                  GestureDetector(
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEFEFE),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Image.asset(
+                        'assets/images/github.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 context.go('/createUser');
@@ -185,7 +243,6 @@ class _MailLoginPageState extends State<MailLoginPage> {
                 style: TextStyle(color: Colors.blueAccent),
               ),
             ),
-            const SizedBox(height: 60),
           ],
         ),
       ),
