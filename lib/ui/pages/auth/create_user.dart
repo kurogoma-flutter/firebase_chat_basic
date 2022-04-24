@@ -216,8 +216,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             const Text(
               'SNSで登録',
               style: TextStyle(fontSize: 20),
