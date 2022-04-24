@@ -4,6 +4,7 @@ import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:go_router/go_router.dart';
 
 Future<void> main() async {
@@ -11,6 +12,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   await Firebase.initializeApp();
+  LineSDK.instance.setup("1657081646").then((_) {
+    print("LineSDK Prepared");
+  });
   runApp(const MyApp());
 }
 

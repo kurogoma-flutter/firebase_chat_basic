@@ -2,6 +2,8 @@ import 'package:chat_app_basic/utils/date_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -182,7 +184,7 @@ Future deleteUser(BuildContext context) async {
   }
 }
 
-// Googleを使ってサインイン
+/// ================ Google サインイン ================ ///
 Future<UserCredential> signInWithGoogle() async {
   // 認証フローのトリガー
   final googleUser = await GoogleSignIn(scopes: [
@@ -204,4 +206,38 @@ Future signOutGoogle() async {
   final googleSignIn = GoogleSignIn();
   await googleSignIn.disconnect();
   FirebaseAuth.instance.signOut();
+}
+
+/// ================ LINE サインイン ================ ///
+
+Future signInWithLine() async {
+  try {
+    final result = await LineSDK.instance.login();
+    // user id -> result.userProfile?.userId
+    // user name -> result.userProfile?.displayName
+    // user avatar -> result.userProfile?.pictureUrl
+
+    /// TODO: ライン情報からユーザー情報を取得。usersコレクションにデータがなければ新規追加
+  } on PlatformException catch (e) {
+    logger.w('ラインログインに失敗しました');
+  }
+}
+
+Future signOutFromLine() async {
+  try {
+    await LineSDK.instance.logout();
+  } on PlatformException catch (e) {
+    print(e.message);
+  }
+}
+
+Future getLineAuthUserInfo() async {
+  try {
+    final result = await LineSDK.instance.getProfile();
+    // user id -> result.userId
+    // user name -> result.displayName
+    // user avatar -> result.pictureUrl
+  } on PlatformException catch (e) {
+    print(e.message);
+  }
 }
