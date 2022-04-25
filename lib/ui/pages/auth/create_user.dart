@@ -242,7 +242,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                     onTap: () async {
                       try {
                         final userCredential = await signInWithGoogle();
-                        if (userCredential.user != null) {
+                        if (userCredential!.user != null) {
                           context.go('/');
                         } else {
                           context.go('error');

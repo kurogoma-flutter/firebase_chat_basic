@@ -185,27 +185,36 @@ Future deleteUser(BuildContext context) async {
 }
 
 /// ================ Google サインイン ================ ///
-Future<UserCredential> signInWithGoogle() async {
-  // 認証フローのトリガー
-  final googleUser = await GoogleSignIn(scopes: [
-    'email',
-  ]).signIn();
-  // リクエストから、認証情報を取得
-  final googleAuth = await googleUser?.authentication;
-  // クレデンシャルを新しく作成
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-  // サインインしたら、UserCredentialを返す
-  return FirebaseAuth.instance.signInWithCredential(credential);
+Future<UserCredential?> signInWithGoogle() async {
+  try {
+    // 認証フローのトリガー
+    final googleUser = await GoogleSignIn(scopes: [
+      'email',
+    ]).signIn();
+    // リクエストから、認証情報を取得
+    final googleAuth = await googleUser?.authentication;
+    // クレデンシャルを新しく作成
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    // サインインしたら、UserCredentialを返す
+    return FirebaseAuth.instance.signInWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    logger.w('Googleサインインに失敗しました。');
+  }
+  return null;
 }
 
 // Googleのサインアウト
 Future signOutGoogle() async {
-  final googleSignIn = GoogleSignIn();
-  await googleSignIn.disconnect();
-  FirebaseAuth.instance.signOut();
+  try {
+    final googleSignIn = GoogleSignIn();
+    await googleSignIn.disconnect();
+    FirebaseAuth.instance.signOut();
+  } on FirebaseAuthException catch (e) {
+    logger.w('サインアウトに失敗しました（Google）');
+  }
 }
 
 /// ================ LINE サインイン ================ ///
@@ -213,13 +222,28 @@ Future signOutGoogle() async {
 Future signInWithLine() async {
   try {
     final result = await LineSDK.instance.login();
-    // user id -> result.userProfile?.userId
-    // user name -> result.userProfile?.displayName
-    // user avatar -> result.userProfile?.pictureUrl
 
-    /// TODO: ライン情報からユーザー情報を取得。usersコレクションにデータがなければ新規追加
+    /// ライン情報からユーザー情報を取得。usersコレクションにデータがなければ新規追加
+    String userName = result.userProfile!.displayName;
+    String uid = result.userProfile!.userId;
+    String? iconPath = result.userProfile!.pictureUrl;
+    List<DocumentSnapshot> userInfo = [];
+    final users = await FirebaseFirestore.instance.collection('users').where('userName', isEqualTo: userName).limit(1).get();
+    userInfo = users.docs;
+    if (userInfo.isEmpty) {
+      try {
+        await FirebaseFirestore.instance.collection('reviewList').add({
+          'uid': uid,
+          'userName': userName,
+          'iconPath': iconPath,
+          'comment': '',
+        });
+      } on FirebaseAuthException catch (e) {
+        logger.w('LINE認証（users追加）に失敗しました。');
+      }
+    }
   } on PlatformException catch (e) {
-    logger.w('ラインログインに失敗しました');
+    logger.w('LINE認証（ログイン）に失敗しました');
   }
 }
 

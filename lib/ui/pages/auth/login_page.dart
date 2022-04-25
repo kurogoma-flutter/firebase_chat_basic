@@ -197,7 +197,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
                     onTap: () async {
                       try {
                         final userCredential = await signInWithGoogle();
-                        if (userCredential.user != null) {
+                        if (userCredential!.user != null) {
                           context.go('/');
                         } else {
                           context.go('error');
@@ -230,7 +230,10 @@ class _MailLoginPageState extends State<MailLoginPage> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      await signInWithLine();
+                      context.go('/');
+                    },
                   ),
 
                   /// Twitter認証
