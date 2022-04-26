@@ -18,14 +18,20 @@ class User {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is User && runtimeType == other.runtimeType && uid == other.uid && name == other.name && isBanned == other.isBanned && iconPath == other.iconPath && comment == other.comment);
+      (other is User &&
+          runtimeType == other.runtimeType &&
+          uid == other.uid &&
+          name == other.name &&
+          isBanned == other.isBanned &&
+          iconPath == other.iconPath &&
+          comment == other.comment);
 
   @override
-  int get hashCode => uid.hashCode ^ name.hashCode ^ isBanned.hashCode ^ isBanned.iconPath ^ isBanned.comment;
+  int get hashCode => uid.hashCode ^ name.hashCode ^ isBanned.hashCode ^ iconPath.hashCode ^ comment.hashCode;
 
   @override
   String toString() {
-    return 'User{' + ' uid: $uid,' + ' name: $name,' + ' isBanned: $isBanned,' +  ' iconPath: $iconPath,' +  ' comment: $comment,' + '}';
+    return 'User{' + ' uid: $uid,' + ' name: $name,' + ' isBanned: $isBanned,' + ' iconPath: $iconPath,' + ' comment: $comment,' + '}';
   }
 
   User copyWith({
