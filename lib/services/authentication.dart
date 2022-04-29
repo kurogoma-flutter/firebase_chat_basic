@@ -96,7 +96,7 @@ Future registWithEmail(String userName, String comment, String email, String pas
       'userName': userName,
       'comment': comment,
       'iconPath': '',
-      'createAt': date.now,
+      'createAt': date.fireStoreFormat.format(DateTime.now()),
     });
     return 'success';
   } on FirebaseAuthException catch (e) {
