@@ -17,8 +17,7 @@ class ChatScreenOnly extends StatefulWidget {
 
 class _ChatScreenOnlyState extends State<ChatScreenOnly> {
   FirestoreMethods methods = FirestoreMethods();
-  final TextEditingController _textController = TextEditingController();
-  late String _text;
+
   late final Stream<QuerySnapshot> _chatStream;
 
   @override
@@ -97,10 +96,39 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
 }
 
 /// テキスト入力フォーム
-class TextInputWidget extends StatelessWidget {
+class TextInputWidget extends StatefulWidget {
   const TextInputWidget({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<TextInputWidget> createState() => _TextInputWidgetState();
+}
+
+class _TextInputWidgetState extends State<TextInputWidget> {
+  // firestoreメソッド
+  FirestoreMethods methods = FirestoreMethods();
+  // テキスト文字列の操作
+  final TextEditingController textController = TextEditingController();
+  // 入力テキスト
+  String _text = '';
+  // 画像のパス
+  String _imagePath = '';
+
+  // 文字入力処理
+  void _handleText(String e) {
+    setState(() {
+      _text = e;
+    });
+  }
+
+  // フォームリセット
+  void clearInput() {
+    textController.clear();
+    setState(() {
+      _text = '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,19 +160,24 @@ class TextInputWidget extends StatelessWidget {
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: const TextField(
+              child: TextField(
+                controller: textController,
                 autofocus: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   counterText: '',
                 ),
                 maxLines: 1,
                 maxLength: 400,
+                onChanged: _handleText,
               ),
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              methods.storeYourChatMessage(_text);
+              clearInput();
+            },
             child: Image.asset(
               'assets/images/send.png',
               scale: 2.4,

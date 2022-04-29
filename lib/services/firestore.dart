@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils/date_methods.dart';
 import 'authentication.dart';
@@ -17,17 +18,20 @@ class FirestoreMethods {
   }
 
   // 「あなた」ページのデータ保存
-  Future<void> storeYourChat(String text) async {
-    logger.i('「あなた」のチャットの保存開始');
+  storeYourChatMessage(String text) async {
+    logger.i('あなたのチャットテキスト登録');
     try {
-      final user = await getLoggedInUser();
-      await FirebaseFirestore.instance.collection('reviewList').add({
-        'uid': user.uid,
-        'text': text,
-        'createAt': date.now,
-      });
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      if (text != "") {
+        await FirebaseFirestore.instance.collection('yourRoom').add({
+          "uid": uid,
+          "text": text,
+          "imagePath": "",
+          "createdAt": date.fireStoreFormat.format(DateTime.now()),
+        });
+      }
     } on Exception catch (e) {
-      logger.e('チャットデータの保存開始');
+      logger.e('テキスト登録中にエラーが発生しました');
     }
   }
 
