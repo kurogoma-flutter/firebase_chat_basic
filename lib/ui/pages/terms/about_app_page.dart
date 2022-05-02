@@ -15,7 +15,13 @@ class AboutAppPage extends StatelessWidget {
               context.go('/');
             },
           ),
-          title: const Text('このアプリについて'),
+          title: const Text(
+            'このアプリについて',
+            style: TextStyle(color: Colors.black87),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black87,
+          ),
           centerTitle: true,
           backgroundColor: Theme.of(context).canvasColor,
           elevation: 2,

@@ -15,7 +15,13 @@ class TermPage extends StatelessWidget {
               context.go('/');
             },
           ),
-          title: const Text('利用規約'),
+          title: const Text(
+            '利用規約',
+            style: TextStyle(color: Colors.black87),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black87,
+          ),
           centerTitle: true,
           backgroundColor: Theme.of(context).canvasColor,
           elevation: 2,

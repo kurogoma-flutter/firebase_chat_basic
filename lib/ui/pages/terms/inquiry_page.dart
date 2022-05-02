@@ -20,7 +20,13 @@ class _InquiryPageState extends State<InquiryPage> {
               context.go('/');
             },
           ),
-          title: const Text('お問合せ'),
+          title: const Text(
+            'お問合せ',
+            style: TextStyle(color: Colors.black87),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black87,
+          ),
           centerTitle: true,
           backgroundColor: Theme.of(context).canvasColor,
           elevation: 2,

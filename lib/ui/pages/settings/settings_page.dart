@@ -18,17 +18,17 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '設定をする',
-          style: TextStyle(color: Colors.black87),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.black87,
-        ),
-        backgroundColor: Theme.of(context).canvasColor,
-        elevation: 2,
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     '設定をする',
+      //     style: TextStyle(color: Colors.black87),
+      //   ),
+      //   iconTheme: const IconThemeData(
+      //     color: Colors.black87,
+      //   ),
+      //   backgroundColor: Theme.of(context).canvasColor,
+      //   elevation: 2,
+      // ),
       body: SafeArea(
         child: Column(
           children: [
@@ -62,113 +62,133 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               onTap: () => context.go('/userPage'),
             ),
-            Container(
-              decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ClipOval(
-                          child: Image.network(
-                              'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+            GestureDetector(
+              child: Container(
+                decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: ClipOval(
+                            child: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        'お問い合わせ',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                  const Icon(Icons.arrow_forward_ios),
-                ],
+                        const SizedBox(width: 20),
+                        const Text(
+                          'お問い合わせ',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
+              onTap: () {
+                context.go('/inquiry');
+              },
             ),
-            Container(
-              decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ClipOval(
-                          child: Image.network(
-                              'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+            GestureDetector(
+              child: Container(
+                decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: ClipOval(
+                            child: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        'このアプリについて',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                  const Icon(Icons.arrow_forward_ios),
-                ],
+                        const SizedBox(width: 20),
+                        const Text(
+                          'このアプリについて',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
+              onTap: () {
+                context.go('/aboutApp');
+              },
             ),
-            Container(
-              decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ClipOval(
-                          child: Image.network(
-                              'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+            GestureDetector(
+              child: Container(
+                decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: ClipOval(
+                            child: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        '利用規約',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                  const Icon(Icons.arrow_forward_ios),
-                ],
+                        const SizedBox(width: 20),
+                        const Text(
+                          '利用規約',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
+              onTap: () {
+                context.go('/term');
+              },
             ),
-            Container(
-              decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ClipOval(
-                          child: Image.network(
-                              'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+            GestureDetector(
+              child: Container(
+                decoration: const BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: Colors.grey, width: 0.5))),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: ClipOval(
+                            child: Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/chat-14a44-kurooon.appspot.com/o/appImage%2Fimages.jpeg?alt=media&token=91254fd0-a2b6-4f81-b3ee-5c9cc886b281'),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        'プライバシーポリシー',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                  const Icon(Icons.arrow_forward_ios),
-                ],
+                        const SizedBox(width: 20),
+                        const Text(
+                          'プライバシーポリシー',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                        )
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
+              onTap: () {
+                context.go('/policy');
+              },
             ),
             const SizedBox(height: 40),
             TextButton(
