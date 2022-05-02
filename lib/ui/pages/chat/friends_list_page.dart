@@ -47,7 +47,7 @@ class _MessageWidgetState extends State<MessageWidget> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
-        elevation: 2,
+        elevation: 0,
         title: const Text(
           'ともだち一覧',
           style: TextStyle(color: Colors.black87),
