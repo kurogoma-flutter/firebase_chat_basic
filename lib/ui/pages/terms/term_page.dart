@@ -157,4 +157,3 @@ class TermPage extends StatelessWidget {
     );
   }
 }
-
