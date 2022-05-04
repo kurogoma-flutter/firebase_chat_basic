@@ -93,3 +93,34 @@ class TermAlphaText extends StatelessWidget {
     );
   }
 }
+
+class TermSubContent extends StatelessWidget {
+  const TermSubContent({Key? key, required this.text, required this.alphabet}) : super(key: key);
+  final String text;
+  final String alphabet;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 60, top: 2, bottom: 2),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 100,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(alphabet + "."),
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: Text(
+                text,
+                overflow: TextOverflow.visible,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
