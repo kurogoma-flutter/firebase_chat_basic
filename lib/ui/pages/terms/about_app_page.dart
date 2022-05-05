@@ -12,7 +12,7 @@ class AboutAppPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_sharp),
             onPressed: () {
-              context.go('/');
+              context.go('/setting');
             },
           ),
           title: const Text(
