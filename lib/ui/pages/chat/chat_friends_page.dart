@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../services/logger.dart';
+import '../../../providers/logger.dart';
 import 'chat_items.dart';
 
 /// TODO: ともだちとのチャットを表示（サブコレクション）

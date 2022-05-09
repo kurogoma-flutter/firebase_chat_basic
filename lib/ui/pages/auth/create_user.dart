@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../services/authentication.dart';
-import '../../../services/logger.dart';
+import '../../../providers/authentication.dart';
+import '../../../providers/logger.dart';
 import '../../components/dialog.dart';
 
 /// ページ仕様

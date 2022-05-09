@@ -1,4 +1,4 @@
-import 'package:chat_app_basic/services/routes.dart';
+import 'package:chat_app_basic/providers/routes.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
