@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../services/firestore.dart';
+import '../../../providers/firestore.dart';
 import '../../../services/logger.dart';
 import 'chat_items.dart';
 

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../services/logger.dart';
 import '../utils/date_methods.dart';
 import 'authentication.dart';
-import 'logger.dart';
 
 class FirestoreMethods {
   DateMethods date = DateMethods();

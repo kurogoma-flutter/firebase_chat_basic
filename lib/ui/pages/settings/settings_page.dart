@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../services/authentication.dart';
+import '../../../providers/authentication.dart';
 
 /// TODO :
 /// ログイン・アウト
@@ -18,17 +18,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     '設定をする',
-      //     style: TextStyle(color: Colors.black87),
-      //   ),
-      //   iconTheme: const IconThemeData(
-      //     color: Colors.black87,
-      //   ),
-      //   backgroundColor: Theme.of(context).canvasColor,
-      //   elevation: 2,
-      // ),
       body: SafeArea(
         child: Column(
           children: [
