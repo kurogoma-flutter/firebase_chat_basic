@@ -1,3 +1,4 @@
+import 'package:chat_app_basic/providers/inquiry_provider.dart';
 import 'package:chat_app_basic/providers/routes.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   // Firebase初期化
@@ -15,7 +17,9 @@ Future<void> main() async {
   LineSDK.instance.setup("1657081646").then((_) {
     print("LineSDK Prepared");
   });
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -30,10 +34,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
-      title: 'レビューアプリ',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Inquiry>(
+          create: (context) => Inquiry(),
+        ),
+      ],
+      child: MaterialApp.router(
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        title: 'レビューアプリ',
+      ),
     );
   }
 }
