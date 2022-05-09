@@ -7,8 +7,8 @@ import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../services/logger.dart';
 import '../ui/components/dialog.dart';
-import 'logger.dart';
 
 // ログインユーザーの情報を取得
 getLoggedInUser() {

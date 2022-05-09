@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../providers/authentication.dart';
-import '../../../providers/logger.dart';
+import '../../../services/logger.dart';
 import '../../components/dialog.dart';
 
 /// ページ仕様

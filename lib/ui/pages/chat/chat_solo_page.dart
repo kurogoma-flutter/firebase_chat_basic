@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../providers/firestore.dart';
-import '../../../providers/logger.dart';
+import '../../../services/logger.dart';
 import 'chat_items.dart';
 
 /// TODO: 登録処理・ImagePicker追加（カメラは最後）
