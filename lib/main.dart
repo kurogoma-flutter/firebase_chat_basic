@@ -1,4 +1,5 @@
 import 'package:chat_app_basic/providers/inquiry_provider.dart';
+import 'package:chat_app_basic/providers/auth_provider.dart';
 import 'package:chat_app_basic/providers/routes.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
@@ -39,6 +40,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<Inquiry>(
           create: (context) => Inquiry(),
         ),
+        ChangeNotifierProvider<AuthProvider>(
+          create: (context) => AuthProvider(),
+        ),
       ],
       child: MaterialApp.router(
         routeInformationParser: router.routeInformationParser,
@@ -63,8 +67,10 @@ class _ChatHomeState extends State<ChatHome> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // スプラッシュ画面などに書き換えても良い
-            return const SizedBox();
+            // ローディング画面などに書き換えても良い
+            return const Center(
+              child: CircleIndicator();
+            );
           }
           if (snapshot.hasData) {
             // User が null でなない、つまりサインイン済みのホーム画面へ

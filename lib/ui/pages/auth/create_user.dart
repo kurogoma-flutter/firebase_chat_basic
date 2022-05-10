@@ -6,10 +6,6 @@ import '../../../providers/authentication.dart';
 import '../../../services/logger.dart';
 import '../../components/dialog.dart';
 
-/// ページ仕様
-/// 1. メールアドレスとパスワードで登録できる ✔
-/// 2. パスワードの非表示はオンオフできる
-/// 3. ログイン画面に遷移できる ✔
 class RegistUserWithMail extends StatefulWidget {
   const RegistUserWithMail({Key? key}) : super(key: key);
 
@@ -18,14 +14,6 @@ class RegistUserWithMail extends StatefulWidget {
 }
 
 class _RegistUserWithMailState extends State<RegistUserWithMail> {
-  // 入力されたメールアドレスx
-  String newUserEmail = '';
-  // 入力されたパスワード
-  String newUserPassword = '';
-  // エラーメッセージなどの格納先
-  String infoText = '';
-  // パスワードの表示非表示
-  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +50,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 ),
                 maxLines: 1,
                 onChanged: (value) {
-                  setState(() {
-                    newUserEmail = value;
-                  });
+                  context.read<AuthProvider>().onChangeUserName(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -89,13 +75,14 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 ),
                 maxLines: 1,
                 onChanged: (value) {
-                  setState(() {
-                    newUserEmail = value;
-                  });
+                  contest.read<AuthProvider>().onChangeNewEmail(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "入力してください";
+                  }
+                  if(!value.contains('@')){
+                    return '不適切な形式です。';
                   }
                   return null;
                 },
@@ -107,7 +94,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
-                obscureText: _isObscure,
+                obscureText: context.read<AuthProvider>().isObscure,
                 decoration: InputDecoration(
                   focusColor: Colors.red,
                   labelText: 'パスワード',
@@ -115,23 +102,22 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                   focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
                   border: const OutlineInputBorder(borderSide: BorderSide()),
                   suffixIcon: IconButton(
-                    icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(context.read<AuthProvider>().isObscure ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {
-                      setState(() {
-                        _isObscure = !_isObscure;
-                      });
+                      context.read<AuthProvider>().onChangeObscure();
                     },
                   ),
                 ),
                 maxLines: 1,
                 onChanged: (value) {
-                  setState(() {
-                    newUserPassword = value;
-                  });
+                  context.read<AuthProvider>().onChangeNewPassword(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "入力してください";
+                    return '入力してください';
+                  }
+                  if(value.length <= 5){
+                    return 'パスワードは6文字以上で設定してください。'
                   }
                   return null;
                 },
@@ -144,64 +130,8 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
               width: 200,
               child: ElevatedButton(
                 onPressed: () async {
-                  try {
-                    // メール/パスワードでユーザー登録
-                    final FirebaseAuth auth = FirebaseAuth.instance;
-                    final UserCredential result = await auth.createUserWithEmailAndPassword(
-                      email: newUserEmail,
-                      password: newUserPassword,
-                    );
-                    setState(() {
-                      infoText = "登録されました";
-                    });
-
-                    /// そのままログインしてHomeへ遷移
-                    final UserCredential login = await auth.signInWithEmailAndPassword(
-                      email: newUserEmail,
-                      password: newUserPassword,
-                    );
-                    // ログインに成功した場合
-                    final User user = login.user!;
-                    setState(() {
-                      infoText = "ログイン!";
-                    });
-                    // ホームに画面遷移
-                    return context.go('/');
-                  } on FirebaseAuthException catch (e) {
-                    // ログインに失敗した場合
-                    String message = '';
-                    // エラーコード別処理
-                    switch (e.code) {
-                      case 'invalid-email':
-                        message = 'メールアドレスが不正です。';
-                        break;
-                      case 'wrong-password':
-                        message = 'パスワードが違います。';
-                        break;
-                      case 'user-disabled':
-                        message = '指定されたユーザーは無効です。';
-                        break;
-                      case 'user-not-found':
-                        message = '指定されたユーザーは存在しません。';
-                        break;
-                      case 'operation-not-allowed':
-                        message = '指定されたユーザーはこの操作を許可していません。';
-                        break;
-                      case 'too-many-requests':
-                        message = '複数回リクエストが発生しました。';
-                        break;
-                      case 'email-already-exists':
-                        message = '指定されたメールアドレスは既に使用されています。';
-                        break;
-                      case 'internal-error':
-                        message = '内部処理エラーが発生しました。';
-                        break;
-                      default:
-                        message = '予期せぬエラーが発生しました。';
-                    }
-
-                    return alertDialog('登録エラー', message, context);
-                  }
+                  // 登録処理
+                  await context.read<AuthProvider>().registWithEmail(context);
                 },
                 child: const Text(
                   '新規登録',
@@ -240,23 +170,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                       child: Image.asset('assets/images/google-icon.png'),
                     ),
                     onTap: () async {
-                      try {
-                        final userCredential = await signInWithGoogle();
-                        if (userCredential!.user != null) {
-                          context.go('/');
-                        } else {
-                          context.go('error');
-                        }
-                      } on FirebaseAuthException catch (e) {
-                        print('FirebaseAuthException');
-                        print('${e.code}');
-                        logger.w('ログインに失敗しました。');
-                      } on Exception catch (e) {
-                        print('Other Exception');
-                        print('${e.toString()}');
-                        logger.w('ログインに失敗しました。');
-                      }
-                    },
+                      await context.read<AuthProvider>().signInWithGoogle(context);
                   ),
 
                   /// LINE認証
@@ -274,7 +188,9 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () async{
+                      await context.read<AuthProvider>().signInWithLine(context);
+                    },
                   ),
 
                   /// Twitter認証
@@ -292,7 +208,9 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      // 未実装
+                    },
                   ),
                 ],
               ),
