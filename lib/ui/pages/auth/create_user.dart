@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../../../providers/authentication.dart';
-import '../../../services/logger.dart';
-import '../../components/dialog.dart';
+import '../../../providers/auth_provider.dart';
 
 class RegistUserWithMail extends StatefulWidget {
   const RegistUserWithMail({Key? key}) : super(key: key);
@@ -14,7 +12,6 @@ class RegistUserWithMail extends StatefulWidget {
 }
 
 class _RegistUserWithMailState extends State<RegistUserWithMail> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,13 +72,13 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 ),
                 maxLines: 1,
                 onChanged: (value) {
-                  contest.read<AuthProvider>().onChangeNewEmail(value);
+                  context.read<AuthProvider>().onChangeNewEmail(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "入力してください";
                   }
-                  if(!value.contains('@')){
+                  if (!value.contains('@')) {
                     return '不適切な形式です。';
                   }
                   return null;
@@ -116,8 +113,8 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                   if (value == null || value.isEmpty) {
                     return '入力してください';
                   }
-                  if(value.length <= 5){
-                    return 'パスワードは6文字以上で設定してください。'
+                  if (value.length <= 5) {
+                    return 'パスワードは6文字以上で設定してください。';
                   }
                   return null;
                 },
@@ -159,19 +156,19 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                 children: <Widget>[
                   /// Google認証
                   GestureDetector(
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFEFEFE),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.black12),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEFEFE),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.black12),
+                        ),
+                        child: Image.asset('assets/images/google-icon.png'),
                       ),
-                      child: Image.asset('assets/images/google-icon.png'),
-                    ),
-                    onTap: () async {
-                      await context.read<AuthProvider>().signInWithGoogle(context);
-                  ),
+                      onTap: () async {
+                        await context.read<AuthProvider>().signInWithGoogle(context);
+                      }),
 
                   /// LINE認証
                   GestureDetector(
@@ -188,7 +185,7 @@ class _RegistUserWithMailState extends State<RegistUserWithMail> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       await context.read<AuthProvider>().signInWithLine(context);
                     },
                   ),

@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../../../providers/authentication.dart';
-import '../../../services/logger.dart';
-import '../../components/dialog.dart';
+import '../../../providers/auth_provider.dart';
 
 class MailLoginPage extends StatefulWidget {
   const MailLoginPage({Key? key}) : super(key: key);
@@ -14,7 +12,6 @@ class MailLoginPage extends StatefulWidget {
 }
 
 class _MailLoginPageState extends State<MailLoginPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
