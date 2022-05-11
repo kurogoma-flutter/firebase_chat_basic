@@ -52,7 +52,7 @@ class AuthProvider extends ChangeNotifier {
 
   onChangeLoginEmail(String? value) {
     if (value is String) {
-      newUserPassword = value;
+      loginUserEmail = value;
       notifyListeners();
     }
   }
@@ -66,6 +66,7 @@ class AuthProvider extends ChangeNotifier {
 
   onChangeObscure() {
     isObscure = !isObscure;
+    notifyListeners();
   }
 
   /// ユーザー認証関連
@@ -114,13 +115,13 @@ class AuthProvider extends ChangeNotifier {
           'iconPath': '',
           'createAt': date.fireStoreFormat.format(DateTime.now()),
         });
+
+        return context.go('/');
       } on Exception catch (e) {
         String message = 'ユーザー登録に失敗しました。';
         logger.w(message);
         return await alertDialog('認証エラー', message, context);
       }
-
-      return;
     } on FirebaseAuthException catch (e) {
       logger.w('新規ユーザー登録に失敗しました。');
       // ログインに失敗した場合
@@ -171,7 +172,7 @@ class AuthProvider extends ChangeNotifier {
       // ログインに成功した場合
       final User user = result.user!;
 
-      return;
+      return context.go('/');
     } on FirebaseAuthException catch (e) {
       logger.w('ログインに失敗しました。');
       // ログインに失敗した場合

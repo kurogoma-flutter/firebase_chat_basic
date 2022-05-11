@@ -60,7 +60,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction, // 入力時バリデーション
                 cursorColor: Colors.blueAccent,
-                obscureText: context.read<AuthProvider>().isObscure,
+                obscureText: context.watch<AuthProvider>().isObscure,
                 decoration: InputDecoration(
                   focusColor: Colors.red,
                   labelText: 'パスワード',
@@ -68,7 +68,7 @@ class _MailLoginPageState extends State<MailLoginPage> {
                   focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.blueAccent)),
                   border: const OutlineInputBorder(borderSide: BorderSide()),
                   suffixIcon: IconButton(
-                    icon: Icon(context.read<AuthProvider>().isObscure ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(context.watch<AuthProvider>().isObscure ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {
                       context.read<AuthProvider>().onChangeObscure();
                     },
