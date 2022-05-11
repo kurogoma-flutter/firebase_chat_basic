@@ -1,11 +1,7 @@
+import 'package:chat_app_basic/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../providers/authentication.dart';
-
-/// TODO :
-/// ログイン・アウト
-/// 退会処理
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -182,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 40),
             TextButton(
               onPressed: () async {
-                await signOut(context);
+                await context.read<AuthProvider>().signOut(context);
               },
               child: const Text(
                 'サインアウト',
@@ -193,7 +189,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                await context.read<AuthProvider>().deleteUser(context);
+              },
               child: const Text(
                 '退会する',
                 style: TextStyle(

@@ -1,5 +1,7 @@
+import 'package:chat_app_basic/providers/auth_provider.dart';
 import 'package:chat_app_basic/providers/inquiry_provider.dart';
-import 'package:chat_app_basic/providers/routes.dart';
+import 'package:chat_app_basic/services/logger.dart';
+import 'package:chat_app_basic/services/routes.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +17,7 @@ Future<void> main() async {
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   await Firebase.initializeApp();
   LineSDK.instance.setup("1657081646").then((_) {
-    print("LineSDK Prepared");
+    logger.i('LineSDK Prepared');
   });
   runApp(
     const MyApp(),
@@ -30,14 +32,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _auth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Inquiry>(
           create: (context) => Inquiry(),
+        ),
+        ChangeNotifierProvider<AuthProvider>(
+          create: (context) => AuthProvider(),
         ),
       ],
       child: MaterialApp.router(
@@ -63,8 +66,10 @@ class _ChatHomeState extends State<ChatHome> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // スプラッシュ画面などに書き換えても良い
-            return const SizedBox();
+            // ローディング画面などに書き換えても良い
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           if (snapshot.hasData) {
             // User が null でなない、つまりサインイン済みのホーム画面へ
