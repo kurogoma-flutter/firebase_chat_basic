@@ -1,3 +1,8 @@
+import 'package:chat_app_basic/ui/pages/auth/create_user.dart';
+import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
+import 'package:chat_app_basic/ui/pages/chat/chat_friends_page.dart';
+import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
+import 'package:chat_app_basic/ui/pages/errors/error_page.dart';
 import 'package:chat_app_basic/ui/pages/settings/settings_page.dart';
 import 'package:chat_app_basic/ui/pages/settings/user_profile.dart';
 import 'package:chat_app_basic/ui/pages/terms/about_app_page.dart';
@@ -7,12 +12,6 @@ import 'package:chat_app_basic/ui/pages/terms/term_page.dart';
 import 'package:chat_app_basic/ui/pages/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../ui/pages/auth/create_user.dart';
-import '../ui/pages/auth/login_page.dart';
-import '../ui/pages/chat/chat_friends_page.dart';
-import '../ui/pages/chat/chat_page.dart';
-import '../ui/pages/errors/error_page.dart';
 
 /// ルーティング設定
 final GoRouter router = GoRouter(
