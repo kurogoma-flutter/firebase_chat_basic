@@ -30,15 +30,26 @@ class _MessageWidgetState extends State<MessageWidget> {
         friendList = snapshot.docs;
       });
       // 検索用配列作成
-      for (var element in friendList) {
-        uidList.add(element['friendsUid']);
+      if (friendList.isNotEmpty) {
+        for (var element in friendList) {
+          uidList.add(element['friendsUid']);
+        }
+        // 配列に合致するデータ一覧を取得
+        var userSnapshot = await FirebaseFirestore.instance.collection('users').where('uid', whereIn: uidList[0]).get();
+        setState(() {
+          userList = userSnapshot.docs;
+        });
       }
-      // 配列に合致するデータ一覧を取得
-      var userSnapshot = await FirebaseFirestore.instance.collection('users').where('uid', whereIn: uidList[0]).get();
-      setState(() {
-        userList = userSnapshot.docs;
-      });
     });
+  }
+
+  /// 友達の有無を識別
+  _judgeHasFriends(List<DocumentSnapshot> userList, User user) {
+    if (userList.isNotEmpty) {
+      return HasFriends(userList: userList, user: user);
+    } else {
+      return const NoFriend();
+    }
   }
 
   @override
@@ -60,36 +71,71 @@ class _MessageWidgetState extends State<MessageWidget> {
           )
         ],
       ),
-      body: SizedBox(
-        width: size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // Mapにしてリスト表示をする
-          children: userList.map((document) {
-            return GestureDetector(
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 8,
-                ),
-                leading: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: ClipOval(
-                    child: Image.network(document['iconPath']),
-                  ),
-                ),
-                trailing: const Text('3分前'),
-                title: Text(document['userName']),
-                subtitle: Text(document['comment'].toString()),
+      body: _judgeHasFriends(userList, user!),
+    );
+  }
+}
+
+/// 友達ありの状態
+class HasFriends extends StatefulWidget {
+  final List<DocumentSnapshot> userList;
+  final User user;
+  HasFriends({Key? key, required this.userList, required this.user}) : super(key: key);
+
+  @override
+  State<HasFriends> createState() => _HasFriendsState();
+}
+
+class _HasFriendsState extends State<HasFriends> {
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        // Mapにしてリスト表示をする
+        children: widget.userList.map((document) {
+          return GestureDetector(
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 8,
               ),
-              onTap: () {
-                // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
-                context.go('/chat/${user!.uid.toString()}/${document['uid'].toString()}');
-              },
-            );
-          }).toList(),
+              leading: SizedBox(
+                height: 50,
+                width: 50,
+                child: ClipOval(
+                  child: Image.network(document['iconPath']),
+                ),
+              ),
+              trailing: const Text('3分前'),
+              title: Text(document['userName']),
+              subtitle: Text(document['comment'].toString()),
+            ),
+            onTap: () {
+              // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
+              context.go('/chat/${widget.user.uid.toString()}/${document['uid'].toString()}');
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// 友達なしの状態
+class NoFriend extends StatelessWidget {
+  const NoFriend({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        '友達がいません',
+        style: TextStyle(
+          fontSize: 20,
         ),
       ),
     );
