@@ -1,12 +1,13 @@
+import 'package:chat_app_basic/providers/chat_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../providers/firestore.dart';
 import '../../../services/logger.dart';
 import 'chat_items.dart';
-
-/// TODO: 登録処理・ImagePicker追加（カメラは最後）
 
 class ChatScreenOnly extends StatefulWidget {
   const ChatScreenOnly({Key? key}) : super(key: key);
@@ -80,7 +81,11 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
                     child: ListView(
                       children: snapshot.data!.docs.map((DocumentSnapshot document) {
                         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                        return RightBalloon(content: data['text']);
+                        if (data['imagePath'] == "") {
+                          return RightBalloon(content: data['text']);
+                        } else {
+                          return RightImage(imagePath: data['imagePath']);
+                        }
                       }).toList(),
                     ),
                   ),
@@ -112,8 +117,6 @@ class _TextInputWidgetState extends State<TextInputWidget> {
   final TextEditingController textController = TextEditingController();
   // 入力テキスト
   String _text = '';
-  // 画像のパス
-  String _imagePath = '';
 
   // 文字入力処理
   void _handleText(String e) {
@@ -138,7 +141,21 @@ class _TextInputWidgetState extends State<TextInputWidget> {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              await context.read<ChatProvider>().getImageFromCamera();
+
+              FirebaseStorage storage = FirebaseStorage.instance;
+              try {
+                String imageUrl = '';
+                String imageName = context.read<ChatProvider>().imageName;
+                final task = await storage.ref('images/$imageName').putFile(context.read<ChatProvider>().file!);
+                imageUrl = await task.ref.getDownloadURL();
+
+                await context.read<ChatProvider>().storeYourChatImage(imageUrl);
+              } catch (e) {
+                print(e);
+              }
+            },
             child: Image.asset(
               'assets/images/camera.png',
               scale: 1.6,
@@ -146,7 +163,20 @@ class _TextInputWidgetState extends State<TextInputWidget> {
           ),
           const SizedBox(width: 6),
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              await context.read<ChatProvider>().getImageFromGallery();
+              FirebaseStorage storage = FirebaseStorage.instance;
+              try {
+                String imageUrl = '';
+                String imageName = context.read<ChatProvider>().imageName;
+                final task = await storage.ref('images/$imageName').putFile(context.read<ChatProvider>().file!);
+                imageUrl = await task.ref.getDownloadURL();
+
+                await context.read<ChatProvider>().storeYourChatImage(imageUrl);
+              } catch (e) {
+                logger.w(e);
+              }
+            },
             child: Image.asset(
               'assets/images/file.png',
               scale: 2,

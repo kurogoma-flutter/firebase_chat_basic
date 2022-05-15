@@ -1,4 +1,5 @@
 import 'package:chat_app_basic/providers/auth_provider.dart';
+import 'package:chat_app_basic/providers/chat_provider.dart';
 import 'package:chat_app_basic/providers/inquiry_provider.dart';
 import 'package:chat_app_basic/services/logger.dart';
 import 'package:chat_app_basic/services/routes.dart';
@@ -41,6 +42,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<AuthProvider>(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider<ChatProvider>(
+          create: (context) => ChatProvider(),
         ),
       ],
       child: MaterialApp.router(
