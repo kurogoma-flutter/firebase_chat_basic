@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
@@ -14,6 +17,11 @@ class ChatProvider extends ChangeNotifier {
   bool isLoading = false;
   // 「あなた」ルームのチャットデータ
   String yourChatText = '';
+  // ImagePicker用
+  File? file;
+  final picker = ImagePicker();
+  String imagePath = '';
+  String imageName = '';
 
   Future fetchYourChatData() async {
     logger.i('「あなた」のチャットデータを取得開始');
@@ -62,6 +70,27 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
+  Future storeYourChatImage(String storagePath) async {
+    logger.i('あなたのチャットで画像保存');
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      if (file != null) {
+        await FirebaseFirestore.instance.collection('yourRoom').add({
+          "uid": uid,
+          "text": "",
+          "imagePath": storagePath,
+          "createdAt": date.fireStoreFormat.format(DateTime.now()),
+        });
+
+        notifyListeners();
+      }
+      logger.i('保存完了');
+    } on Exception catch (e) {
+      notifyListeners();
+      logger.e('テキスト登録中にエラーが発生しました');
+    }
+  }
+
   // ともだち一覧用ユーザーデータ取得
   Future getUserList(BuildContext context) async {
     isLoading = true;
@@ -100,5 +129,31 @@ class ChatProvider extends ChangeNotifier {
     } on Exception catch (e) {
       logger.e('ログイン中のユーザーデータ取得中にエラーが発生しました。');
     }
+  }
+
+  // ImagePicker（ギャラリー）
+  Future getImageFromGallery() async {
+    final image = await picker.pickImage(source: ImageSource.gallery);
+    // 空の場合終了
+    if (image == null) {
+      return;
+    }
+    imagePath = image.path;
+    imageName = image.name;
+    file = File(imagePath);
+    notifyListeners();
+  }
+
+  // ImagePicker（カメラ）
+  Future getImageFromCamera() async {
+    final image = await picker.pickImage(source: ImageSource.camera);
+    // 空の場合終了
+    if (image == null) {
+      return;
+    }
+    imagePath = image.path;
+    imageName = image.name;
+    file = File(imagePath);
+    notifyListeners();
   }
 }
