@@ -14,7 +14,7 @@ class TermPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_sharp),
             onPressed: () {
-              context.go('/setting');
+              context.go('/home/2');
             },
           ),
           title: const Text(

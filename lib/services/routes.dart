@@ -2,7 +2,6 @@ import 'package:chat_app_basic/ui/pages/auth/create_user.dart';
 import 'package:chat_app_basic/ui/pages/auth/login_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_friends_page.dart';
 import 'package:chat_app_basic/ui/pages/chat/chat_page.dart';
-import 'package:chat_app_basic/ui/pages/errors/error_page.dart';
 import 'package:chat_app_basic/ui/pages/settings/settings_page.dart';
 import 'package:chat_app_basic/ui/pages/settings/user_profile.dart';
 import 'package:chat_app_basic/ui/pages/terms/about_app_page.dart';
@@ -15,11 +14,19 @@ import 'package:go_router/go_router.dart';
 
 /// ルーティング設定
 final GoRouter router = GoRouter(
-  errorBuilder: (context, state) => const ErrorPage(),
+  // errorBuilder: (context, state) => const ErrorPage(),
   routes: <GoRoute>[
     GoRoute(
       path: '/', // ベース：認証状態を識別してホーム画面orログインへ遷移させる
-      builder: (BuildContext context, GoRouterState state) => const ChatScreen(),
+      builder: (BuildContext context, GoRouterState state) => ChatScreen(),
+    ),
+    GoRoute(
+      path: '/home/:tab', // ベース：タブ指定した場合
+      builder: (context, state) {
+        // パスパラメータの値を取得するには state.params を使用
+        final int tab = int.parse(state.params['tab']!);
+        return ChatScreen(tab: tab);
+      },
     ),
     GoRoute(
       path: '/login', // ログイン画面

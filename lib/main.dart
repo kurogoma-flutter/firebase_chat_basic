@@ -77,7 +77,7 @@ class _ChatHomeState extends State<ChatHome> {
           }
           if (snapshot.hasData) {
             // User が null でなない、つまりサインイン済みのホーム画面へ
-            return const ChatScreen();
+            return ChatScreen();
           } else {
             // User が null である、つまり未サインインのサインイン画面へ
             return const MailLoginPage();

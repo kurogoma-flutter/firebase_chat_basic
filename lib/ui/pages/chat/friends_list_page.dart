@@ -3,16 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class MessageWidget extends StatefulWidget {
-  const MessageWidget({
+class FriendListPage extends StatefulWidget {
+  const FriendListPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MessageWidget> createState() => _MessageWidgetState();
+  State<FriendListPage> createState() => _FriendListPageState();
 }
 
-class _MessageWidgetState extends State<MessageWidget> {
+class _FriendListPageState extends State<FriendListPage> {
   // ログインユーザー取得
   final user = FirebaseAuth.instance.currentUser;
   // クエリ処理で用いるリスト
