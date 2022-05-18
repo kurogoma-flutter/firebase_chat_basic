@@ -6,8 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../services/logger.dart';
 import 'chat_items.dart';
 
-/// TODO: ともだちとのチャットを表示（サブコレクション）
-
 class ChatScreenFriends extends StatefulWidget {
   const ChatScreenFriends({Key? key, required this.myUid, required this.friendsUid}) : super(key: key);
   final String myUid;
@@ -24,6 +22,9 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   String friendsUid = '';
   // 相手のユーザー名
   String userName = '';
+  // スクロール操作
+  final ScrollController _scrollController = ScrollController(initialScrollOffset: 1000 * 100);
+
   // 相手ユーザーデータを取得
   List<DocumentSnapshot> friendData = [];
   _getFriendData() async {
@@ -42,8 +43,12 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   }
 
   // ユーザーデータ取得
-  final Stream<QuerySnapshot> _chatItemStream =
-      FirebaseFirestore.instance.collection('chatRoom').doc('KWhVFN8xH6b1m57tUZIE').collection('contents').snapshots();
+  final Stream<QuerySnapshot> _chatItemStream = FirebaseFirestore.instance
+      .collection('chatRoom')
+      .doc('KWhVFN8xH6b1m57tUZIE')
+      .collection('contents')
+      .where('roomId', isEqualTo: 'KWhVFN8xH6b1m57tUZIE')
+      .snapshots();
 
   @override
   void initState() {
@@ -84,13 +89,13 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
       body: StreamBuilder<QuerySnapshot>(
           stream: _chatItemStream,
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            // if (snapshot.hasError) {
-            //   return const Center(
-            //       child: Text(
-            //     'ERROR!! Something went wrong',
-            //     style: TextStyle(fontSize: 30),
-            //   ));
-            // }
+            if (snapshot.hasError) {
+              return const Center(
+                  child: Text(
+                'ERROR!! Something went wrong',
+                style: TextStyle(fontSize: 30),
+              ));
+            }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -110,6 +115,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
                         horizontal: 16,
                       ),
                       child: ListView(
+                        controller: _scrollController,
                         children: snapshot.data!.docs.map((DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 

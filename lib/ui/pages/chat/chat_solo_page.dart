@@ -21,6 +21,9 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
 
   late final Stream<QuerySnapshot> _chatStream;
 
+  // スクロール操作
+  final ScrollController _scrollController = ScrollController(initialScrollOffset: 1000 * 100);
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +82,7 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
                       horizontal: 16,
                     ),
                     child: ListView(
+                      controller: _scrollController,
                       children: snapshot.data!.docs.map((DocumentSnapshot document) {
                         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                         if (data['imagePath'] == "") {
