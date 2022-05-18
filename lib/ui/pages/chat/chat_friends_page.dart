@@ -119,17 +119,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
                         children: snapshot.data!.docs.map((DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-                          if (data['imagePath'] == "") {
-                            if (data['uid'] != friendsUid) {
-                              return RightBalloon(content: data['text']);
-                            }
-                            return LeftBalloon(content: data['text'], iconPath: userIconPath);
-                          } else {
-                            if (data['uid'] != friendsUid) {
-                              return RightImage(imagePath: data['imagePath']);
-                            }
-                            return LeftImage(imagePath: data['imagePath'], iconPath: userIconPath);
-                          }
+                          return _chatItem(data, userIconPath);
                         }).toList(),
                       ),
                     ),
