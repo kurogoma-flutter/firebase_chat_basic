@@ -111,7 +111,16 @@ class LeftImage extends StatelessWidget {
               child: ClipOval(
                 child: CachedNetworkImage(
                   imageUrl: iconPath,
-                  placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+                  placeholder: (context, url) => Container(
+                    child: Center(
+                      child: Row(
+                        children: const [
+                          CircularProgressIndicator(),
+                          Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))
+                        ],
+                      ),
+                    ),
+                  ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
@@ -124,7 +133,16 @@ class LeftImage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
                   imageUrl: imagePath,
-                  placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+                  placeholder: (context, url) => Container(
+                    child: Center(
+                      child: Row(
+                        children: const [
+                          CircularProgressIndicator(),
+                          Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))
+                        ],
+                      ),
+                    ),
+                  ),
                   errorWidget: (context, url, error) => const Icon(Icons.error, size: 36),
                   fit: BoxFit.cover,
                 ),
@@ -156,7 +174,13 @@ class RightImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
               imageUrl: imagePath,
-              placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+              placeholder: (context, url) => Container(
+                child: Center(
+                  child: Row(
+                    children: const [CircularProgressIndicator(), Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))],
+                  ),
+                ),
+              ),
               errorWidget: (context, url, error) => const Icon(Icons.error),
               fit: BoxFit.cover,
             ),
