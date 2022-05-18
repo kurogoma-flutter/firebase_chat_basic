@@ -25,7 +25,7 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
   void initState() {
     super.initState();
     setState(() {
-      _chatStream = methods.getYourChatData();
+      _chatStream = context.read<ChatProvider>().fetchYourChatData();
     });
   }
 

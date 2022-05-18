@@ -23,15 +23,10 @@ class ChatProvider extends ChangeNotifier {
   String imagePath = '';
   String imageName = '';
 
-  Future fetchYourChatData() async {
+  fetchYourChatData() {
     logger.i('「あなた」のチャットデータを取得開始');
     try {
-      isLoading = true;
-      notifyListeners();
-      var yourRoom = await FirebaseFirestore.instance.collection("yourRoom").orderBy("createdAt", descending: false).snapshots();
-      isLoading = false;
-      notifyListeners();
-      return yourRoom;
+      return FirebaseFirestore.instance.collection("yourRoom").orderBy("createdAt", descending: false).snapshots();
     } on Exception catch (e) {
       logger.e('「あなた」のチャットデータ取得でエラーが発生しました。');
     }

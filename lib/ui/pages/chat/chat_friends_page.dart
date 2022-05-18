@@ -20,6 +20,8 @@ class ChatScreenFriends extends StatefulWidget {
 class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   // アイコンパス
   String userIconPath = '';
+  // 相手のuid
+  String friendsUid = '';
   // 相手のユーザー名
   String userName = '';
   // 相手ユーザーデータを取得
@@ -31,6 +33,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
       setState(() {
         friendData = document.docs;
         userIconPath = friendData[0]['iconPath'];
+        friendsUid = friendData[0]['uid'];
         userName = friendData[0]['userName'];
       });
     } on FirebaseAuthException catch (e) {
@@ -39,12 +42,8 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
   }
 
   // ユーザーデータ取得
-  final Stream<QuerySnapshot> _chatItemStream = FirebaseFirestore.instance
-      .collection('chatRoom')
-      .doc('iDUQweyzoVQJt8IloDMb')
-      .collection('chatContents')
-      .orderBy('timestamp', descending: false)
-      .snapshots();
+  final Stream<QuerySnapshot> _chatItemStream =
+      FirebaseFirestore.instance.collection('chatRoom').doc('KWhVFN8xH6b1m57tUZIE').collection('contents').snapshots();
 
   @override
   void initState() {
@@ -85,13 +84,13 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
       body: StreamBuilder<QuerySnapshot>(
           stream: _chatItemStream,
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                  child: Text(
-                'ERROR!! Something went wrong',
-                style: TextStyle(fontSize: 30),
-              ));
-            }
+            // if (snapshot.hasError) {
+            //   return const Center(
+            //       child: Text(
+            //     'ERROR!! Something went wrong',
+            //     style: TextStyle(fontSize: 30),
+            //   ));
+            // }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -109,17 +108,27 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 10,
                       ),
-                      child: Column(
+                      child: ListView(
                         children: snapshot.data!.docs.map((DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                          return _chatItem(data, userIconPath);
+
+                          if (data['imagePath'] == "") {
+                            if (data['uid'] != friendsUid) {
+                              return RightBalloon(content: data['text']);
+                            }
+                            return LeftBalloon(content: data['text'], iconPath: userIconPath);
+                          } else {
+                            if (data['uid'] != friendsUid) {
+                              return RightImage(imagePath: data['imagePath']);
+                            }
+                            return LeftImage(imagePath: data['imagePath'], iconPath: userIconPath);
+                          }
                         }).toList(),
                       ),
                     ),
                   ),
-                  TextInputWidget(),
+                  const TextInputWidget(),
                 ],
               ),
             );
