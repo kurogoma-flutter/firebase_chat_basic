@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 /// チャット吹き出し（相手側）
@@ -108,7 +109,11 @@ class LeftImage extends StatelessWidget {
           children: [
             CircleAvatar(
               child: ClipOval(
-                child: Image.network(iconPath),
+                child: CachedNetworkImage(
+                  imageUrl: iconPath,
+                  placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -117,8 +122,10 @@ class LeftImage extends StatelessWidget {
               height: 120,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  imagePath,
+                child: CachedNetworkImage(
+                  imageUrl: imagePath,
+                  placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+                  errorWidget: (context, url, error) => const Icon(Icons.error, size: 36),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -147,8 +154,10 @@ class RightImage extends StatelessWidget {
           height: 120,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              imagePath,
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              placeholder: (context, url) => Container(child: Center(child: const CircularProgressIndicator())),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               fit: BoxFit.cover,
             ),
           ),
