@@ -112,8 +112,10 @@ class LeftImage extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: iconPath,
                   placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Center(
-                    child: Row(
+                  errorWidget: (context, url, error) => Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [Icon(Icons.error, size: 36), Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))],
                     ),
                   ),
@@ -129,8 +131,10 @@ class LeftImage extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: imagePath,
                   placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Center(
-                    child: Row(
+                  errorWidget: (context, url, error) => Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [Icon(Icons.error, size: 36), Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))],
                     ),
                   ),
@@ -165,9 +169,11 @@ class RightImage extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: imagePath,
               placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Center(
-                child: Row(
-                  children: const [Icon(Icons.error, size: 36), Text('画像を取得できませんでした。', style: TextStyle(fontSize: 12, color: Colors.redAccent))],
+              errorWidget: (context, url, error) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [Icon(Icons.error, size: 36), Text('画像を取得できませんでした。', style: TextStyle(fontSize: 10, color: Colors.redAccent))],
                 ),
               ),
               fit: BoxFit.cover,
