@@ -26,7 +26,10 @@ class ChatProvider extends ChangeNotifier {
   fetchYourChatData() {
     logger.i('「あなた」のチャットデータを取得開始');
     try {
-      return FirebaseFirestore.instance.collection("yourRoom").orderBy("createdAt", descending: false).snapshots();
+      return FirebaseFirestore.instance
+          .collection("yourRoom")
+          .orderBy("createdAt", descending: false)
+          .snapshots();
     } on Exception catch (e) {
       logger.e('「あなた」のチャットデータ取得でエラーが発生しました。');
     }
@@ -94,7 +97,11 @@ class ChatProvider extends ChangeNotifier {
       List<DocumentSnapshot> friendList = [];
       // yourRoomからログインユーザーのUIDが含まれるデータを取得
       var user = await context.read<AuthProvider>().getLoggedInUser(context);
-      var snapshot = await FirebaseFirestore.instance.collection('friends').where('hostUid', isEqualTo: user.uid).limit(1).get();
+      var snapshot = await FirebaseFirestore.instance
+          .collection('friends')
+          .where('hostUid', isEqualTo: user.uid)
+          .limit(1)
+          .get();
       friendList = snapshot.docs;
       isLoading = false;
 
@@ -109,7 +116,10 @@ class ChatProvider extends ChangeNotifier {
   Future getFriendList(friendList) async {
     logger.i('ともだち一覧データの取得開始');
     try {
-      return FirebaseFirestore.instance.collection('users').where('uid', arrayContainsAny: friendList.friendsUid).snapshots();
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', arrayContainsAny: friendList.friendsUid)
+          .snapshots();
     } on Exception catch (e) {
       logger.e('ともだち一覧のデータ取得中にエラーが発生しました。');
     }
@@ -120,7 +130,10 @@ class ChatProvider extends ChangeNotifier {
     logger.i('ログイン中のユーザーデータ取得開始');
     try {
       final user = await context.read<AuthProvider>().getLoggedInUser(context);
-      return await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: user.uid).get();
+      return await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: user.uid)
+          .get();
     } on Exception catch (e) {
       logger.e('ログイン中のユーザーデータ取得中にエラーが発生しました。');
     }
@@ -150,5 +163,55 @@ class ChatProvider extends ChangeNotifier {
     imageName = image.name;
     file = File(imagePath);
     notifyListeners();
+  }
+
+  // アイコンパス
+  String userIconPath = '';
+  // 相手のuid
+  String friendsUid = '';
+  // 相手のユーザー名
+  String userName = '';
+
+  // 相手ユーザーデータを取得
+  List<DocumentSnapshot> friendData = [];
+  Future getFriendData(String friendsUid) async {
+    logger.i('相手データ取得開始');
+    try {
+      var document = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: friendsUid)
+          .limit(1)
+          .get();
+
+      friendData = document.docs;
+      userIconPath = friendData[0]['iconPath'];
+      friendsUid = friendData[0]['uid'];
+      userName = friendData[0]['userName'];
+      notifyListeners();
+    } on FirebaseAuthException catch (e) {
+      logger.e('ユーザーデータの取得に失敗しました。');
+    }
+  }
+
+  // チャットのドキュメントID
+  List<DocumentSnapshot> chatRoomInfo = [];
+  // チャットルームID
+  String roomId = '';
+  Future getChatRoomInfo() async {
+    logger.i('チャットルームデータ取得');
+    try {
+      var document = await FirebaseFirestore.instance
+          .collection('chatRoom')
+          .where('pairUser',
+              arrayContains: FirebaseAuth.instance.currentUser!.uid)
+          .limit(1)
+          .get();
+
+      chatRoomInfo = document.docs;
+      roomId = chatRoomInfo[0].id.toString();
+      notifyListeners();
+    } on FirebaseAuthException catch (e) {
+      logger.e('ユーザーデータの取得に失敗しました。');
+    }
   }
 }

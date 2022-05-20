@@ -22,89 +22,30 @@ class ChatScreenFriends extends StatefulWidget {
 }
 
 class _ChatScreenFriendsState extends State<ChatScreenFriends> {
-  // アイコンパス
-  String userIconPath = '';
-  // 相手のuid
-  String friendsUid = '';
-  // 相手のユーザー名
-  String userName = '';
-  // チャットルームID
-  String roomId = '';
   // ローディング管理
   bool isLoading = true;
+  late final Stream<QuerySnapshot> chatItemStream;
   // スクロール操作
   final ScrollController _scrollController =
       ScrollController(initialScrollOffset: 1000 * 100);
-  late final Stream<QuerySnapshot> _chatItemStream;
-
-  // 相手ユーザーデータを取得
-  List<DocumentSnapshot> friendData = [];
-  _getFriendData() async {
-    logger.i('相手データ取得開始');
-    try {
-      var document = await FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: widget.friendsUid)
-          .limit(1)
-          .get();
-
-      setState(() {
-        friendData = document.docs;
-        userIconPath = friendData[0]['iconPath'];
-        friendsUid = friendData[0]['uid'];
-        userName = friendData[0]['userName'];
-      });
-    } on FirebaseAuthException catch (e) {
-      logger.e('ユーザーデータの取得に失敗しました。');
-    }
-  }
-
-  // チャットのドキュメントID
-  List<DocumentSnapshot> chatRoomInfo = [];
-  _getChatRoomInfo() async {
-    logger.i('チャットルームデータ取得');
-    try {
-      var document = await FirebaseFirestore.instance
-          .collection('chatRoom')
-          .where('pairUser',
-              arrayContains: FirebaseAuth.instance.currentUser!.uid)
-          .limit(1)
-          .get();
-
-      setState(() {
-        chatRoomInfo = document.docs;
-      });
-    } on FirebaseAuthException catch (e) {
-      logger.e('ユーザーデータの取得に失敗しました。');
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     Future(() async {
-      await _getFriendData();
-      await _getChatRoomInfo();
+      await context.read<ChatProvider>().getFriendData(widget.friendsUid);
+      await context.read<ChatProvider>().getChatRoomInfo();
       setState(() {
-        roomId = chatRoomInfo[0].id.toString();
-        _chatItemStream = FirebaseFirestore.instance
+        chatItemStream = FirebaseFirestore.instance
             .collection('chatRoom')
-            .doc(roomId)
+            .doc(context.read<ChatProvider>().roomId)
             .collection('contents')
-            .where('roomId', isEqualTo: roomId)
+            .where('roomId', isEqualTo: context.read<ChatProvider>().roomId)
             .snapshots();
         isLoading = false;
       });
     });
   }
-
-  // ユーザーデータ取得
-  // final Stream<QuerySnapshot> _chatItemStream = FirebaseFirestore.instance
-  //     .collection('chatRoom')
-  //     .doc(roomId)
-  //     .collection('contents')
-  //     .where('roomId', isEqualTo: roomId)
-  //     .snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +60,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
           },
         ),
         title: Text(
-          userName,
+          context.read<ChatProvider>().userName,
           style: const TextStyle(
             color: Colors.black87,
           ),
@@ -139,7 +80,7 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
               child: CircularProgressIndicator(),
             )
           : StreamBuilder<QuerySnapshot>(
-              stream: _chatItemStream,
+              stream: chatItemStream,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
@@ -174,7 +115,8 @@ class _ChatScreenFriendsState extends State<ChatScreenFriends> {
                               Map<String, dynamic> data =
                                   document.data()! as Map<String, dynamic>;
 
-                              return _chatItem(data, userIconPath);
+                              return _chatItem(data,
+                                  context.read<ChatProvider>().userIconPath);
                             }).toList(),
                           ),
                         ),
