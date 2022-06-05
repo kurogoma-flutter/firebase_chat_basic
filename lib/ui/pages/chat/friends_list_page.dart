@@ -25,7 +25,10 @@ class _FriendListPageState extends State<FriendListPage> {
     super.initState();
     Future(() async {
       // friendsコレクションから、友達のUID一覧を取得
-      var snapshot = await FirebaseFirestore.instance.collection('friends').where('hostUid', isEqualTo: user!.uid).get();
+      var snapshot = await FirebaseFirestore.instance
+          .collection('friends')
+          .where('hostUid', isEqualTo: user!.uid)
+          .get();
       setState(() {
         friendList = snapshot.docs;
       });
@@ -35,7 +38,10 @@ class _FriendListPageState extends State<FriendListPage> {
           uidList.add(element['friendsUid']);
         }
         // 配列に合致するデータ一覧を取得
-        var userSnapshot = await FirebaseFirestore.instance.collection('users').where('uid', whereIn: uidList[0]).get();
+        var userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', whereIn: uidList[0])
+            .get();
         setState(() {
           userList = userSnapshot.docs;
         });
@@ -80,7 +86,8 @@ class _FriendListPageState extends State<FriendListPage> {
 class HasFriends extends StatefulWidget {
   final List<DocumentSnapshot> userList;
   final User user;
-  HasFriends({Key? key, required this.userList, required this.user}) : super(key: key);
+  HasFriends({Key? key, required this.userList, required this.user})
+      : super(key: key);
 
   @override
   State<HasFriends> createState() => _HasFriendsState();
@@ -97,27 +104,43 @@ class _HasFriendsState extends State<HasFriends> {
         crossAxisAlignment: CrossAxisAlignment.center,
         // Mapにしてリスト表示をする
         children: widget.userList.map((document) {
-          return GestureDetector(
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 8,
-              ),
-              leading: SizedBox(
-                height: 50,
-                width: 50,
-                child: ClipOval(
-                  child: Image.network(document['iconPath']),
+          return Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.only(
+                      left: 32,
+                      right: 10,
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    leading: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: ClipOval(
+                        child: Image.network(document['iconPath']),
+                      ),
+                    ),
+                    trailing: const Text('3分前'),
+                    title: Text(document['userName']),
+                    subtitle: Text(document['comment'].toString()),
+                  ),
+                  onTap: () {
+                    // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
+                    context.go(
+                        '/chat/${widget.user.uid.toString()}/${document['uid'].toString()}');
+                  },
                 ),
               ),
-              trailing: const Text('3分前'),
-              title: Text(document['userName']),
-              subtitle: Text(document['comment'].toString()),
-            ),
-            onTap: () {
-              // チャットページへ遷移 /chat/ログインユーザーのUID/選択した友達のUID
-              context.go('/chat/${widget.user.uid.toString()}/${document['uid'].toString()}');
-            },
+              const Padding(
+                padding: EdgeInsets.only(right: 15),
+                child: CircleAvatar(
+                  maxRadius: 4,
+                  backgroundColor: Colors.blueAccent,
+                ),
+              ),
+            ],
           );
         }).toList(),
       ),

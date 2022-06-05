@@ -2,6 +2,7 @@ import 'package:chat_app_basic/providers/chat_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,8 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
   late final Stream<QuerySnapshot> _chatStream;
 
   // スクロール操作
-  final ScrollController _scrollController = ScrollController(initialScrollOffset: 1000 * 100);
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 1000 * 100);
 
   @override
   void initState() {
@@ -83,8 +85,10 @@ class _ChatScreenOnlyState extends State<ChatScreenOnly> {
                     ),
                     child: ListView(
                       controller: _scrollController,
-                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data =
+                            document.data()! as Map<String, dynamic>;
                         if (data['imagePath'] == "") {
                           return RightBalloon(content: data['text']);
                         } else {
@@ -152,7 +156,9 @@ class _TextInputWidgetState extends State<TextInputWidget> {
               try {
                 String imageUrl = '';
                 String imageName = context.read<ChatProvider>().imageName;
-                final task = await storage.ref('images/$imageName').putFile(context.read<ChatProvider>().file!);
+                final task = await storage
+                    .ref('images/$imageName')
+                    .putFile(context.read<ChatProvider>().file!);
                 imageUrl = await task.ref.getDownloadURL();
 
                 await context.read<ChatProvider>().storeYourChatImage(imageUrl);
@@ -173,7 +179,9 @@ class _TextInputWidgetState extends State<TextInputWidget> {
               try {
                 String imageUrl = '';
                 String imageName = context.read<ChatProvider>().imageName;
-                final task = await storage.ref('images/$imageName').putFile(context.read<ChatProvider>().file!);
+                final task = await storage
+                    .ref('images/$imageName')
+                    .putFile(context.read<ChatProvider>().file!);
                 imageUrl = await task.ref.getDownloadURL();
 
                 await context.read<ChatProvider>().storeYourChatImage(imageUrl);
